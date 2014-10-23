@@ -9,7 +9,7 @@
     tools:context=".MyActivity">
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="Path of The Food"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
