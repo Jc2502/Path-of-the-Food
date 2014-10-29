@@ -88,7 +88,7 @@ public class Login extends Activity {
             JSONObject jsonObject;
             try {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
-                jsonObject = HttpClientHelp.Login(HttpClientHelp.URL, this.acUser, this.acPass);
+                jsonObject = HttpClientHelp.Login(CONFIG.SERVER_URL, this.acUser, this.acPass);
 
                 //SessionManager session = new SessionManager(this.context);
 

@@ -21,8 +21,8 @@ import java.util.List;
 
 
 public class HttpClientHelp {
-    public static final String URL = "http://pof.marinsalinas.com/api/v1/";
-    //private static final String DATEF = "yyyy-MM-dd HH:mm:ss";
+
+    //
     //private Gson gson = new GsonBuilder().setDateFormat(DATEF).create();
 
     public static JSONObject Login(String URL, String acUser, String acPass) throws JSONException {
@@ -30,10 +30,10 @@ public class HttpClientHelp {
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
         Log.e("ERROR", "request");
-        HttpPost request = new HttpPost(URL + "login");
+        HttpPost request = new HttpPost(URL +CONFIG.LOGIN);
         List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-        postParameters.add(new BasicNameValuePair("username", acUser));
-        postParameters.add(new BasicNameValuePair("password", acPass));
+        postParameters.add(new BasicNameValuePair(CONFIG.USER, acUser));
+        postParameters.add(new BasicNameValuePair(CONFIG.PASS, acPass));
 
         try {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
@@ -87,8 +87,8 @@ public class HttpClientHelp {
             throws JSONException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet request = new HttpGet(URL + "logout");
-        request.setHeader("X-Auth-Token", api);
+        HttpGet request = new HttpGet(URL+CONFIG.LOGOUT);
+        request.setHeader(CONFIG.LOGOUT_HEADER, api);
         Log.e("HEADER-->", api);
         try {
             HttpResponse response = httpClient.execute(request);

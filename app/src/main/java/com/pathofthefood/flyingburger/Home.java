@@ -76,7 +76,7 @@ public class Home extends Activity {
             JSONObject jsonObject;
             try {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
-                jsonObject = HttpClientHelp.logout(HttpClientHelp.URL, this.api);
+                jsonObject = HttpClientHelp.logout(CONFIG.SERVER_URL, this.api);
 
                 //SessionManager session = new SessionManager(this.context);
 
