@@ -7,21 +7,51 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class Home extends Activity {
     Button LogOut;
     String Token;
+    private List<Product> mProductList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mProductList = ShoppingCartHelper.getCatalog(getResources());
         LogOut = (Button) findViewById(R.id.button);
+
+        ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
+        listViewCatalog.setAdapter(new ProductAdapter(mProductList, getLayoutInflater(), false));
+
+        listViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Intent productDetailsIntent = new Intent(getBaseContext(),ProductDetailsActivity.class);
+                productDetailsIntent.putExtra(ShoppingCartHelper.PRODUCT_INDEX, position);
+                startActivity(productDetailsIntent);
+            }
+        });
+
+        Button viewShoppingCart = (Button) findViewById(R.id.ButtonViewCart);
+        viewShoppingCart.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
+                startActivity(viewShoppingCartIntent);
+            }
+        });
 
         LogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,19 +107,10 @@ public class Home extends Activity {
             try {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
                 jsonObject = HttpClientHelp.logout(CONFIG.SERVER_URL, this.api);
-
-                //SessionManager session = new SessionManager(this.context);
-
-                //value = jsonObject.getString(KEY_ID);
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
                 if (value != null) {
-                    //token = jsonObject.getJSONObject("user").getString("api_token");
-                    //Log.e("Api_Token-->", token);
-                    //access = jsonObject.getString(KEY_ACCES);
-                    //moderator = jsonObject.getString(KEY_MODERATOR);
-                    //Log.d("JSON ", id);
-                    //session.createLogin(id, access, moderator);
+
                     return false;
                 } else {
                     this.message = "Error Login";

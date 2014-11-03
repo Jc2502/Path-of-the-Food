@@ -22,7 +22,6 @@ import java.util.List;
 
 public class HttpClientHelp {
 
-    //
     //private Gson gson = new GsonBuilder().setDateFormat(DATEF).create();
 
     public static JSONObject Login(String URL, String acUser, String acPass) throws JSONException {
