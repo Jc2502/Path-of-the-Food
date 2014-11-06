@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,36 +19,50 @@ public class Login extends Activity {
     String value, token;
     EditText User, Pass;
     Button LogIn;
+    TextView registro;
     boolean login = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.activity_login);
 
         User = (EditText) findViewById(R.id.userText);
         Pass = (EditText) findViewById(R.id.passwordText);
 
         LogIn = (Button) findViewById(R.id.loginButton);
+        registro = (TextView) findViewById(R.id.textViewRegistro);
+
+        registro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), User_Register.class));
+
+
+            }
+        });
 
         LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!login) {
-                    login = true;
                     String usr = User.getText().toString();
                     String pass = Pass.getText().toString();
                     Log.d("VALORES: ", usr + "||" + pass);
 
                     if (usr.equals("") || pass.equals("")) {
+                        LogIn.setEnabled(true);
+                        login = false;
                         Toast.makeText(getApplicationContext(), "Alguno de los campos vacios", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    try {
-                        login(usr, pass);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        try {
+                          login(usr, pass);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -89,9 +104,6 @@ public class Login extends Activity {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
                 jsonObject = HttpClientHelp.Login(CONFIG.SERVER_URL, this.acUser, this.acPass);
 
-                //SessionManager session = new SessionManager(this.context);
-
-                //value = jsonObject.getString(KEY_ID);
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
                 if (value != null) {
@@ -122,7 +134,7 @@ public class Login extends Activity {
             Log.d("LoginTask", "Entra a onPostExecute..");
             this.loginButton.setEnabled(true);
             if (!result) {
-
+                login = true;
                 Toast.makeText(this.context, "Loggeo Exitosamente!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), Home.class).putExtras(id));
                 finish();
