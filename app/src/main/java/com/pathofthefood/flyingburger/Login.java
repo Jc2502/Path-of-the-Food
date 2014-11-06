@@ -33,7 +33,7 @@ public class Login extends Activity {
         LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!login) {
+                if (!login) {
                     login = true;
                     String usr = User.getText().toString();
                     String pass = Pass.getText().toString();
@@ -64,13 +64,12 @@ public class Login extends Activity {
     class LoginTask extends AsyncTask<String, Void, Boolean> {
 
 
-
+        Bundle id;
         private Context context;
         private String acUser;
         private String acPass;
         private String message;
         private Button loginButton;
-        Bundle id;
 
         public LoginTask(Context ctx, String acUser, String acPass, Button loginButton) {
             this.context = ctx;
@@ -100,10 +99,6 @@ public class Login extends Activity {
                     Log.e("Api_Token-->", token);
                     id = new Bundle();
                     id.putSerializable("token", token);
-                    //access = jsonObject.getString(KEY_ACCES);
-                    //moderator = jsonObject.getString(KEY_MODERATOR);
-                    //Log.d("JSON ", id);
-                    //session.createLogin(id, access, moderator);
                     return false;
                 } else {
                     this.message = "Error Login";
@@ -138,7 +133,6 @@ public class Login extends Activity {
         }
 
     }
-
 
 
 }

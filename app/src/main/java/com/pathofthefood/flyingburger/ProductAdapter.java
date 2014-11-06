@@ -11,74 +11,74 @@ import java.util.List;
 
 public class ProductAdapter extends BaseAdapter {
 
-	private List<Product> mProductList;
-	private LayoutInflater mInflater;
-	private boolean mShowQuantity;
+    private List<Product> mProductList;
+    private LayoutInflater mInflater;
+    private boolean mShowQuantity;
 
-	public ProductAdapter(List<Product> list, LayoutInflater inflater, boolean showQuantity) {
-		mProductList = list;
-		mInflater = inflater;
-		mShowQuantity = showQuantity;
-	}
+    public ProductAdapter(List<Product> list, LayoutInflater inflater, boolean showQuantity) {
+        mProductList = list;
+        mInflater = inflater;
+        mShowQuantity = showQuantity;
+    }
 
-	@Override
-	public int getCount() {
-		return mProductList.size();
-	}
+    @Override
+    public int getCount() {
+        return mProductList.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return mProductList.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        return mProductList.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		final ViewItem item;
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewItem item;
 
-		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.item, null);
-			item = new ViewItem();
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item, null);
+            item = new ViewItem();
 
-			item.productImageView = (ImageView) convertView
-					.findViewById(R.id.ImageViewItem);
+            item.productImageView = (ImageView) convertView
+                    .findViewById(R.id.ImageViewItem);
 
-			item.productTitle = (TextView) convertView
-					.findViewById(R.id.TextViewItem);
+            item.productTitle = (TextView) convertView
+                    .findViewById(R.id.TextViewItem);
 
-			item.productQuantity = (TextView) convertView
-					.findViewById(R.id.textViewQuantity);
+            item.productQuantity = (TextView) convertView
+                    .findViewById(R.id.textViewQuantity);
 
-			convertView.setTag(item);
-		} else {
-			item = (ViewItem) convertView.getTag();
-		}
+            convertView.setTag(item);
+        } else {
+            item = (ViewItem) convertView.getTag();
+        }
 
-		Product curProduct = mProductList.get(position);
+        Product curProduct = mProductList.get(position);
 
-		item.productImageView.setImageDrawable(curProduct.productImage);
-		item.productTitle.setText(curProduct.title);
+        item.productImageView.setImageDrawable(curProduct.productImage);
+        item.productTitle.setText(curProduct.title);
 
-		// Show the quantity in the cart or not
-		if (mShowQuantity) {
-			item.productQuantity.setText("Quantity: "
-					+ ShoppingCartHelper.getProductQuantity(curProduct));
-		} else {
-			// Hid the view
-			item.productQuantity.setVisibility(View.GONE);
-		}
+        // Show the quantity in the cart or not
+        if (mShowQuantity) {
+            item.productQuantity.setText("Quantity: "
+                    + ShoppingCartHelper.getProductQuantity(curProduct));
+        } else {
+            // Hid the view
+            item.productQuantity.setVisibility(View.GONE);
+        }
 
-		return convertView;
-	}
+        return convertView;
+    }
 
-	private class ViewItem {
-		ImageView productImageView;
-		TextView productTitle;
-		TextView productQuantity;
-	}
+    private class ViewItem {
+        ImageView productImageView;
+        TextView productTitle;
+        TextView productQuantity;
+    }
 
 }

@@ -1,43 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:background="#ffffff">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-<TextView
+    <TextView
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="24sp"
         android:layout_margin="5dip"
-        android:text="Product Catalog"/>
+        android:text="Product Catalog"
+        android:textColor="#000000"
+        android:textSize="24sp" />
 
-<ListView android:layout_height="0dp"
-          android:layout_weight="1"
-          android:id="@+id/ListViewCatalog"
-          android:layout_width="fill_parent"
-          android:background="#ffffff"
-          android:clickable="true"
-          android:cacheColorHint="#ffffff">
-</ListView>
-<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dip"
-            android:layout_gravity="end"
+    <ListView
+        android:id="@+id/ListViewCatalog"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ffffff"
+        android:cacheColorHint="#ffffff"
+        android:clickable="true">
+
+        </ListView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
             android:id="@+id/ButtonViewCart"
-            android:text="View Shopping Cart"/>
-    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:id="@+id/button"
-           />
-</LinearLayout>
+            android:layout_gravity="end"
+            android:layout_margin="5dip"
+            android:text="View Shopping Cart" />
 
+        <Button
+            android:id="@+id/buttonlogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout" />
 
+        <Button
+            android:id="@+id/buttonedit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EditInfo" />
+    </LinearLayout>
 
 </LinearLayout>

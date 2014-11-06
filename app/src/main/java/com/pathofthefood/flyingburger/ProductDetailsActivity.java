@@ -10,69 +10,69 @@ import java.util.List;
 
 public class ProductDetailsActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.productdetails);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.productdetails);
 
-		List<Product> catalog = ShoppingCartHelper.getCatalog(getResources());
+        List<Product> catalog = ShoppingCartHelper.getCatalog(getResources());
 
-		int productIndex = getIntent().getExtras().getInt(
-				ShoppingCartHelper.PRODUCT_INDEX);
-		final Product selectedProduct = catalog.get(productIndex);
+        int productIndex = getIntent().getExtras().getInt(
+                ShoppingCartHelper.PRODUCT_INDEX);
+        final Product selectedProduct = catalog.get(productIndex);
 
-		// Set the proper image and text
-		ImageView productImageView = (ImageView) findViewById(R.id.ImageViewProduct);
-		productImageView.setImageDrawable(selectedProduct.productImage);
-		TextView productTitleTextView = (TextView) findViewById(R.id.TextViewProductTitle);
-		productTitleTextView.setText(selectedProduct.title);
-		TextView productDetailsTextView = (TextView) findViewById(R.id.TextViewProductDetails);
-		productDetailsTextView.setText(selectedProduct.description);
+        // Set the proper image and text
+        ImageView productImageView = (ImageView) findViewById(R.id.ImageViewProduct);
+        productImageView.setImageDrawable(selectedProduct.productImage);
+        TextView productTitleTextView = (TextView) findViewById(R.id.TextViewProductTitle);
+        productTitleTextView.setText(selectedProduct.title);
+        TextView productDetailsTextView = (TextView) findViewById(R.id.TextViewProductDetails);
+        productDetailsTextView.setText(selectedProduct.description);
 
-		// Update the current quantity in the cart
-		TextView textViewCurrentQuantity = (TextView) findViewById(R.id.textViewCurrentlyInCart);
-		textViewCurrentQuantity.setText("Currently in Cart: "
-				+ ShoppingCartHelper.getProductQuantity(selectedProduct));
+        // Update the current quantity in the cart
+        TextView textViewCurrentQuantity = (TextView) findViewById(R.id.textViewCurrentlyInCart);
+        textViewCurrentQuantity.setText("Currently in Cart: "
+                + ShoppingCartHelper.getProductQuantity(selectedProduct));
 
-		// Save a reference to the quantity edit text
-		final EditText editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
+        // Save a reference to the quantity edit text
+        final EditText editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
 
-		Button addToCartButton = (Button) findViewById(R.id.ButtonAddToCart);
-		addToCartButton.setOnClickListener(new OnClickListener() {
+        Button addToCartButton = (Button) findViewById(R.id.ButtonAddToCart);
+        addToCartButton.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-				// Check to see that a valid quantity was entered
-				int quantity = 0;
-				try {
-					quantity = Integer.parseInt(editTextQuantity.getText()
-							.toString());
+                // Check to see that a valid quantity was entered
+                int quantity = 0;
+                try {
+                    quantity = Integer.parseInt(editTextQuantity.getText()
+                            .toString());
 
-					if (quantity < 0) {
-						Toast.makeText(getBaseContext(),
-								"Please enter a quantity of 0 or higher",
-								Toast.LENGTH_SHORT).show();
-						return;
-					}
+                    if (quantity < 0) {
+                        Toast.makeText(getBaseContext(),
+                                "Please enter a quantity of 0 or higher",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-				} catch (Exception e) {
-					Toast.makeText(getBaseContext(),
-							"Please enter a numeric quantity",
-							Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(),
+                            "Please enter a numeric quantity",
+                            Toast.LENGTH_SHORT).show();
 
-					return;
-				}
+                    return;
+                }
 
-				// If we make it here, a valid quantity was entered
-				ShoppingCartHelper.setQuantity(selectedProduct, quantity);
+                // If we make it here, a valid quantity was entered
+                ShoppingCartHelper.setQuantity(selectedProduct, quantity);
 
-				// Close the activity
-				finish();
-			}
-		});
+                // Close the activity
+                finish();
+            }
+        });
 
-	}
+    }
 
 }
