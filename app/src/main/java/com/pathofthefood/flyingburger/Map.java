@@ -1,9 +1,13 @@
 package com.pathofthefood.flyingburger;
 
 import android.app.Activity;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,12 +59,21 @@ public class Map extends Activity {
     private void addMarker() {
 
         /** Make sure that the map has been initialised **/
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        // Getting the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+        // Getting Current Location
+        Location location = locationManager.getLastKnownLocation(provider);
         if (null != googleMap) {
+            LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
+
             googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(0, 0))
+                            .position(currentPosition)
                             .title("Marker")
                             .draggable(true)
             );
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));
         }
     }
 
