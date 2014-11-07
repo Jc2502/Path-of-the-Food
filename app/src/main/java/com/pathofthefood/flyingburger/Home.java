@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,6 +22,7 @@ public class Home extends Activity {
     Button LogOut, EditInfo,Delete;
     String Token;
     private List<Product> mProductList;
+    ArrayList<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class Home extends Activity {
     }
 
     public void user_info(String token) throws JSONException {
-        new UserInfoTask(getApplicationContext(), token, EditInfo).execute();
+        new UserInfoTask(getApplicationContext(), token, EditInfo,users).execute();
     }
 
     public void delete_user(String token, String api)throws JSONException{new DeleteUserTask(getApplicationContext(),token,api,Delete).execute();}
@@ -262,17 +264,19 @@ public class Home extends Activity {
 
     class UserInfoTask extends AsyncTask<String, Void, Boolean> {
 
-        String value;
+
 
         private Context context;
         private String api;
         private Button editButton;
+        private ArrayList<User> users;
         private String message;
+        private Bundle informacion;
 
-        public UserInfoTask(Context ctx, String api, Button editButton) {
+        public UserInfoTask(Context ctx, String api, Button editButton,ArrayList<User> users) {
             this.context = ctx;
             this.api = api;
-
+            this.users = users;
             this.editButton = editButton;
             this.editButton.setEnabled(false);
 
@@ -282,18 +286,21 @@ public class Home extends Activity {
         @Override
         protected Boolean doInBackground(String... params) {
             Log.d("UserInfoTask", "Entra a doInBack..");
-            JSONObject jsonObject;
+
             try {
                 Log.d("UserInfoTask", "Entra a doInBack..TRY");
-                jsonObject = HttpClientHelp.user_info(CONFIG.SERVER_URL, this.api);
-                value = jsonObject.toString();
-                Log.e("JSON  ", value);
-                if (jsonObject.has("message")) {
+                HttpClientHelp client = new HttpClientHelp();
+                this.users = client.user_info(CONFIG.SERVER_URL, this.api);
 
-                    this.message = String.valueOf(jsonObject.get("message"));
+                if (this.users == null) {
+
+                    this.message = "NO EXISTE";
                     Log.d("EditTask", "ErrorEdit");
                     return true;
                 } else {
+                    informacion = new Bundle();
+                    informacion.putSerializable("users", this.users);
+
                     return false;
                 }
             } catch (JSONException e) {
@@ -315,8 +322,9 @@ public class Home extends Activity {
             if (!result) {
 
                 Toast.makeText(this.context, "Edit User Info", Toast.LENGTH_SHORT).show();
-                /*startActivity(new Intent(getApplicationContext(), Login.class));
-                finish();*/
+                Intent edituser = new Intent (this.context, Information.class);
+                edituser.putExtras(informacion);
+                startActivity(edituser);
 
             } else {
                 Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();

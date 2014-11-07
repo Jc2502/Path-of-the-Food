@@ -1,6 +1,8 @@
 package com.pathofthefood.flyingburger;
 
 import android.util.Log;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -24,7 +26,7 @@ import java.util.List;
 
 public class HttpClientHelp {
 
-    //private Gson gson = new GsonBuilder().setDateFormat(DATEF).create();
+    private Gson gson = new GsonBuilder().setDateFormat(CONFIG.DATE_FORMAT).create();
 
     //Iniciar Sesion
     public static JSONObject Login(String URL, String acUser, String acPass) throws JSONException {
@@ -180,7 +182,7 @@ public class HttpClientHelp {
     }
 
     // Obtener informacion de Usuario
-    public static JSONObject user_info(String URL, String api)
+    public  ArrayList<User> user_info(String URL, String api)
             throws JSONException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
@@ -199,7 +201,12 @@ public class HttpClientHelp {
             bufferedReader.close();
             JSONObject jsonObj = new JSONObject(stringBuffer.toString());
             Log.e("USER_INFO-->", jsonObj.toString());
-            return jsonObj;
+            ArrayList<User> user = new ArrayList<User>();
+            for (int i = 0; i < jsonObj.length(); i++) {
+                user.add(gson.fromJson(jsonObj.toString(), User.class));
+                Log.e("JSONOBJ", jsonObj.toString());
+            }
+            return user;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
 
