@@ -6,6 +6,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -79,7 +80,7 @@ public class HttpClientHelp {
     }
 
     //Registro de Usuario
-    public static JSONObject register(String URL,String user,String pass,String email,String phone,String fullname) throws JSONException {
+    public static JSONObject register(String URL, String user, String pass, String email, String phone, String fullname) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -135,6 +136,7 @@ public class HttpClientHelp {
         }
         return null;
     }
+
 
     //Cerrar Sesion
     public static JSONObject logout(String URL, String api)
@@ -196,7 +198,7 @@ public class HttpClientHelp {
             }
             bufferedReader.close();
             JSONObject jsonObj = new JSONObject(stringBuffer.toString());
-            Log.e("Logout", jsonObj.toString());
+            Log.e("USER_INFO-->", jsonObj.toString());
             return jsonObj;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -219,12 +221,13 @@ public class HttpClientHelp {
     }
 
     //Editar la informacion del usuario esta puede ser igual
-    public static JSONObject edit_user(String URL,String api,String id, String user,String email,String phone,String fullname) throws JSONException {
+    public static JSONObject edit_user(String URL, String api, String id, String user, String email, String phone, String fullname) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
         //HttpPost request = new HttpPost(URL + CONFIG.USR_INFO+id);
-        HttpPut request = new HttpPut(URL+CONFIG.USR_INFO+"/"+id);
+        HttpPut request = new HttpPut(URL + CONFIG.USR_INFO + "/" + id);
+        request.setHeader(CONFIG.API_HEADER, api);
         List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
         postParameters.add(new BasicNameValuePair(CONFIG.USER, user));
         postParameters.add(new BasicNameValuePair(CONFIG.EMAIL, email));
@@ -235,6 +238,51 @@ public class HttpClientHelp {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
                     postParameters);
             request.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(request);
+
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            jsonObject = new JSONObject(stringBuffer.toString());
+
+            return jsonObject;
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            Log.d("ClientProtocolException", e.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Log.d("Exception", e.toString());
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public static JSONObject delete_user(String URL, String api, String id) throws JSONException {
+        BufferedReader bufferedReader = null;
+        JSONObject jsonObject;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpDelete request = new HttpDelete(URL + CONFIG.USR_INFO + "/" + id);
+        request.setHeader(CONFIG.API_HEADER, api);
+        try {
 
             HttpResponse response = httpClient.execute(request);
 
@@ -315,11 +363,11 @@ public class HttpClientHelp {
     }
 
     //Obtener Direccion especifica
-    public static JSONObject show_address(String URL, String api,String id)
+    public static JSONObject show_address(String URL, String api, String id)
             throws JSONException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet request = new HttpGet(URL + CONFIG.ADDRESS+"/"+id);
+        HttpGet request = new HttpGet(URL + CONFIG.ADDRESS + "/" + id);
         request.setHeader(CONFIG.API_HEADER, api);
         Log.e("HEADER-->", api);
         try {
@@ -356,12 +404,13 @@ public class HttpClientHelp {
     }
 
     //Editar Direccion Especifica
-    public static JSONObject edit_address(String URL,String api,String id, String label,String description,String textaddress, String latitude,String longitude) throws JSONException {
+    public static JSONObject edit_address(String URL, String api, String id, String label, String description, String textaddress, String latitude, String longitude) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
         //HttpPost request = new HttpPost(URL + CONFIG.USR_INFO+id);
-        HttpPut request = new HttpPut(URL+CONFIG.USR_INFO+"/"+id);
+        HttpPut request = new HttpPut(URL + CONFIG.USR_INFO + "/" + id);
+        request.setHeader(CONFIG.API_HEADER, api);
         List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
         postParameters.add(new BasicNameValuePair(CONFIG.LABEL, label));
         postParameters.add(new BasicNameValuePair(CONFIG.DESCRIPTION, description));
@@ -412,12 +461,13 @@ public class HttpClientHelp {
     }
 
     //Crear nueva direccion
-    public static JSONObject add_address(String URL,String api, String label,String description,String textaddress, String latitude,String longitude) throws JSONException {
+    public static JSONObject add_address(String URL, String api, String label, String description, String textaddress, String latitude, String longitude) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
         Log.e("ERROR", "request");
         HttpPost request = new HttpPost(URL + CONFIG.ADDRESS);
+        request.setHeader(CONFIG.API_HEADER, api);
         List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
         postParameters.add(new BasicNameValuePair(CONFIG.LABEL, label));
         postParameters.add(new BasicNameValuePair(CONFIG.DESCRIPTION, description));

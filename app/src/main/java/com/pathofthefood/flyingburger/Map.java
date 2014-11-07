@@ -70,7 +70,7 @@ public class Map extends Activity {
 
             googleMap.addMarker(new MarkerOptions()
                             .position(currentPosition)
-                            .title("Marker")
+                            .title("MI CASA")
                             .draggable(true)
             );
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));

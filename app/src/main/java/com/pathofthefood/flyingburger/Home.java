@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class Home extends Activity {
-    Button LogOut, EditInfo;
+    Button LogOut, EditInfo,Delete;
     String Token;
     private List<Product> mProductList;
 
@@ -29,6 +29,7 @@ public class Home extends Activity {
         mProductList = ShoppingCartHelper.getCatalog(getResources());
         LogOut = (Button) findViewById(R.id.buttonlogout);
         EditInfo = (Button) findViewById(R.id.buttonedit);
+        Delete = (Button) findViewById(R.id.buttondelete);
 
         ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
         listViewCatalog.setAdapter(new ProductAdapter(mProductList, getLayoutInflater(), false));
@@ -49,7 +50,7 @@ public class Home extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
+                    Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
                 startActivity(viewShoppingCartIntent);
             }
         });
@@ -94,6 +95,28 @@ public class Home extends Activity {
                 }
             }
         });
+
+        Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    String id = extras.getString("usr_id");
+                    Token = extras.getString("token");
+                    Log.e("EXTRAS", Token+"-----"+id);
+                    // and get whatever type user account id is
+                    try {
+                        delete_user(Token,id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.d("NO EXTRA", "NO EXTRA");
+                }
+
+            }
+        });
     }
 
     public void logout(String token) throws JSONException {
@@ -103,6 +126,8 @@ public class Home extends Activity {
     public void user_info(String token) throws JSONException {
         new UserInfoTask(getApplicationContext(), token, EditInfo).execute();
     }
+
+    public void delete_user(String token, String api)throws JSONException{new DeleteUserTask(getApplicationContext(),token,api,Delete).execute();}
 
     class LogOutTask extends AsyncTask<String, Void, Boolean> {
 
@@ -159,6 +184,72 @@ public class Home extends Activity {
             if (!result) {
 
                 Toast.makeText(this.context, "Cerro Sesion!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
+
+            } else {
+                Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    class DeleteUserTask extends AsyncTask<String, Void, Boolean> {
+
+        String value;
+
+        private Context context;
+        private String api,id;
+        private Button loginButton;
+        private String message;
+
+        public DeleteUserTask(Context ctx, String api,String id, Button loginButton) {
+            this.context = ctx;
+            this.api = api;
+            this.id = id;
+
+            this.loginButton = loginButton;
+            this.loginButton.setEnabled(false);
+
+        }
+
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            Log.d("Logout", "Entra a doInBack..");
+            JSONObject jsonObject;
+            try {
+                Log.d("LogoutTask", "Entra a doInBack..TRY");
+                jsonObject = HttpClientHelp.delete_user(CONFIG.SERVER_URL, this.api, this.id);
+                value = jsonObject.toString();
+                Log.e("JSON  ", value);
+                if (value != null) {
+
+                    return false;
+                } else {
+                    this.message = "Error Logout";
+                    Log.d("LogoutTask", "ErrorLogout");
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                this.message = "ERROR";
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.message = "Error Inesperado";
+                return true;
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            Log.d("LogoutTask", "Entra a onPostExecute..");
+            this.loginButton.setEnabled(true);
+            if (!result) {
+
+                Toast.makeText(this.context, "Usuario Eliminado!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
 

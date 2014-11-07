@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 
 public class Login extends Activity {
-    String value, token;
+    String value, token,usr_id;
     EditText User, Pass;
     Button LogIn;
     TextView registro;
@@ -108,9 +108,12 @@ public class Login extends Activity {
                 Log.e("JSON  ", value);
                 if (value != null) {
                     token = jsonObject.getJSONObject("user").getString("api_token");
+                    usr_id = jsonObject.getJSONObject("user").getString("id");
                     Log.e("Api_Token-->", token);
+                    Log.e("User_ID-->", usr_id);
                     id = new Bundle();
                     id.putSerializable("token", token);
+                    id.putSerializable("usr_id", usr_id);
                     return false;
                 } else {
                     this.message = "Error Login";
