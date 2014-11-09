@@ -75,7 +75,6 @@ public class User_Register extends Activity {
     class RegisterTask extends AsyncTask<String, Void, Boolean> {
 
 
-
         private Context context;
         private String usr;
         private String pwd;
@@ -126,17 +125,16 @@ public class User_Register extends Activity {
                                 msj = msj + String.valueOf(jsonmsj.getJSONArray("phone").get(0)) + "\n";
                             }
                             this.message = msj;
-                        }
-                        else{
+                        } else {
                             if (jsonmsj.has("username")) {
                                 this.message = String.valueOf(jsonmsj.getJSONArray("username").get(0));
-                               }
+                            }
                             if (jsonmsj.has("email")) {
                                 this.message = String.valueOf(jsonmsj.getJSONArray("email").get(0));
-                                }
+                            }
                             if (jsonmsj.has("phone")) {
                                 this.message = String.valueOf(jsonmsj.getJSONArray("phone").get(0));
-                                }
+                            }
                         }
                         return true;
                     }

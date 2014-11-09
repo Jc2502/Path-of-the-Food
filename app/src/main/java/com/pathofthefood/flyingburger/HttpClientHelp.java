@@ -139,7 +139,6 @@ public class HttpClientHelp {
         return null;
     }
 
-
     //Cerrar Sesion
     public static JSONObject logout(String URL, String api)
             throws JSONException {
@@ -181,16 +180,26 @@ public class HttpClientHelp {
         return null;
     }
 
-    // Obtener informacion de Usuario
-    public  ArrayList<User> user_info(String URL, String api)
-            throws JSONException {
+    //Editar la informacion del usuario esta puede ser igual
+    public static JSONObject edit_user(String URL, String api, String id, String user, String email, String phone, String fullname) throws JSONException {
         BufferedReader bufferedReader = null;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet request = new HttpGet(URL + CONFIG.USR_INFO);
+        JSONObject jsonObject;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPut request = new HttpPut(URL + CONFIG.USR_INFO + "/" + id);
         request.setHeader(CONFIG.API_HEADER, api);
-        Log.e("HEADER-->", api);
+        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+        postParameters.add(new BasicNameValuePair(CONFIG.USER, user));
+        postParameters.add(new BasicNameValuePair(CONFIG.EMAIL, email));
+        postParameters.add(new BasicNameValuePair(CONFIG.PHONE, phone));
+        postParameters.add(new BasicNameValuePair(CONFIG.FN, fullname));
+
         try {
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
+                    postParameters);
+            request.setEntity(entity);
+
             HttpResponse response = httpClient.execute(request);
+
             bufferedReader = new BufferedReader(new InputStreamReader(response
                     .getEntity().getContent()));
             StringBuilder stringBuffer = new StringBuilder();
@@ -199,19 +208,18 @@ public class HttpClientHelp {
                 stringBuffer.append(line);
             }
             bufferedReader.close();
-            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
-            Log.e("USER_INFO-->", jsonObj.toString());
-            ArrayList<User> user = new ArrayList<User>();
-            for (int i = 0; i < jsonObj.length(); i++) {
-                user.add(gson.fromJson(jsonObj.toString(), User.class));
-                Log.e("JSONOBJ", jsonObj.toString());
-            }
-            return user;
+            jsonObject = new JSONObject(stringBuffer.toString());
+
+            return jsonObject;
+
         } catch (ClientProtocolException e) {
             e.printStackTrace();
+            Log.d("ClientProtocolException", e.toString());
 
         } catch (IOException e) {
             e.printStackTrace();
+
+            Log.d("Exception", e.toString());
 
         } finally {
             if (bufferedReader != null) {
@@ -227,19 +235,14 @@ public class HttpClientHelp {
         return null;
     }
 
-    //Editar la informacion del usuario esta puede ser igual
-    public static JSONObject edit_user(String URL, String api, String id, String user, String email, String phone, String fullname) throws JSONException {
+    public static JSONObject edit_pass(String URL, String api, String id, String password) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        //HttpPost request = new HttpPost(URL + CONFIG.USR_INFO+id);
-        HttpPut request = new HttpPut(URL + CONFIG.USR_INFO + "/" + id);
+        HttpPut request = new HttpPut(URL + CONFIG.USR_INFO + "/" + id + "/password");
         request.setHeader(CONFIG.API_HEADER, api);
         List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-        postParameters.add(new BasicNameValuePair(CONFIG.USER, user));
-        postParameters.add(new BasicNameValuePair(CONFIG.EMAIL, email));
-        postParameters.add(new BasicNameValuePair(CONFIG.PHONE, phone));
-        postParameters.add(new BasicNameValuePair(CONFIG.FN, fullname));
+        postParameters.add(new BasicNameValuePair(CONFIG.PASS, password));
 
         try {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
@@ -509,6 +512,53 @@ public class HttpClientHelp {
             e.printStackTrace();
 
             Log.d("Exception", e.toString());
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
+    // Obtener informacion de Usuario
+    public ArrayList<User> user_info(String URL, String api)
+            throws JSONException {
+        BufferedReader bufferedReader = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet request = new HttpGet(URL + CONFIG.USR_INFO);
+        request.setHeader(CONFIG.API_HEADER, api);
+        Log.e("HEADER-->", api);
+        try {
+            HttpResponse response = httpClient.execute(request);
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
+
+            Log.e("USER_INFO-->", jsonObj.toString());
+            ArrayList<User> user = new ArrayList<User>();
+            for (int i = 0; i < jsonObj.length(); i = 2) {
+                user.add(gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class));
+                Log.e("JSONOBJ", jsonObj.getJSONObject("user").toString());
+            }
+            return user;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
 
         } finally {
             if (bufferedReader != null) {

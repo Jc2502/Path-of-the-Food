@@ -19,10 +19,10 @@ import java.util.List;
 
 
 public class Home extends Activity {
-    Button LogOut, EditInfo,Delete;
+    Button LogOut, EditInfo, Delete;
     String Token;
-    private List<Product> mProductList;
     ArrayList<User> users;
+    private List<Product> mProductList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class Home extends Activity {
 
             @Override
             public void onClick(View v) {
-                    Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
+                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
                 startActivity(viewShoppingCartIntent);
             }
         });
@@ -105,10 +105,10 @@ public class Home extends Activity {
                 if (extras != null) {
                     String id = extras.getString("usr_id");
                     Token = extras.getString("token");
-                    Log.e("EXTRAS", Token+"-----"+id);
+                    Log.e("EXTRAS", Token + "-----" + id);
                     // and get whatever type user account id is
                     try {
-                        delete_user(Token,id);
+                        delete_user(Token, id);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -126,10 +126,12 @@ public class Home extends Activity {
     }
 
     public void user_info(String token) throws JSONException {
-        new UserInfoTask(getApplicationContext(), token, EditInfo,users).execute();
+        new UserInfoTask(getApplicationContext(), token, EditInfo, users).execute();
     }
 
-    public void delete_user(String token, String api)throws JSONException{new DeleteUserTask(getApplicationContext(),token,api,Delete).execute();}
+    public void delete_user(String token, String api) throws JSONException {
+        new DeleteUserTask(getApplicationContext(), token, api, Delete).execute();
+    }
 
     class LogOutTask extends AsyncTask<String, Void, Boolean> {
 
@@ -201,11 +203,11 @@ public class Home extends Activity {
         String value;
 
         private Context context;
-        private String api,id;
+        private String api, id;
         private Button loginButton;
         private String message;
 
-        public DeleteUserTask(Context ctx, String api,String id, Button loginButton) {
+        public DeleteUserTask(Context ctx, String api, String id, Button loginButton) {
             this.context = ctx;
             this.api = api;
             this.id = id;
@@ -265,7 +267,6 @@ public class Home extends Activity {
     class UserInfoTask extends AsyncTask<String, Void, Boolean> {
 
 
-
         private Context context;
         private String api;
         private Button editButton;
@@ -273,7 +274,7 @@ public class Home extends Activity {
         private String message;
         private Bundle informacion;
 
-        public UserInfoTask(Context ctx, String api, Button editButton,ArrayList<User> users) {
+        public UserInfoTask(Context ctx, String api, Button editButton, ArrayList<User> users) {
             this.context = ctx;
             this.api = api;
             this.users = users;
@@ -298,6 +299,10 @@ public class Home extends Activity {
                     Log.d("EditTask", "ErrorEdit");
                     return true;
                 } else {
+
+                    User user = new User();
+                    user = this.users.get(0);
+                    Log.e("Users", String.valueOf(user.getEmail()));
                     informacion = new Bundle();
                     informacion.putSerializable("users", this.users);
 
@@ -322,7 +327,7 @@ public class Home extends Activity {
             if (!result) {
 
                 Toast.makeText(this.context, "Edit User Info", Toast.LENGTH_SHORT).show();
-                Intent edituser = new Intent (this.context, Information.class);
+                Intent edituser = new Intent(this.context, Information.class);
                 edituser.putExtras(informacion);
                 startActivity(edituser);
 

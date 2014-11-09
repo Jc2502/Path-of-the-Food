@@ -66,7 +66,7 @@ public class Map extends Activity {
         // Getting Current Location
         Location location = locationManager.getLastKnownLocation(provider);
         if (null != googleMap) {
-            LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
+            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 
             googleMap.addMarker(new MarkerOptions()
                             .position(currentPosition)

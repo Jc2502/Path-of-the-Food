@@ -8,5 +8,7 @@
     <string name="title_activity_map">Map</string>
     <string name="title_activity_information">Information</string>
     <string name="title_activity_user__register">Register</string>
+    <string name="title_activity_address">Address</string>
+    <string name="title_activity_address_details">AddressDetails</string>
 
 </resources>

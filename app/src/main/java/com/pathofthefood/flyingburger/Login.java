@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 
 public class Login extends Activity {
-    String value, token,usr_id;
+    String value, token, usr_id;
     EditText User, Pass;
     Button LogIn;
     TextView registro;
@@ -57,7 +57,7 @@ public class Login extends Activity {
 
                     } else {
                         try {
-                          login(usr, pass);
+                            login(usr, pass);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
