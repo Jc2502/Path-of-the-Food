@@ -62,7 +62,7 @@
                 android:label="@string/title_activity_user__register">
         </activity>
         <activity
-                android:name=".Address"
+                android:name=".AddressBook"
                 android:label="@string/title_activity_address">
         </activity>
         <activity

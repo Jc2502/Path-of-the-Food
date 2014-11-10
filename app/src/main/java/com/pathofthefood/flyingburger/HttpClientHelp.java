@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -332,7 +333,7 @@ public class HttpClientHelp {
     }
 
     //Obtener Direcciones
-    public static JSONObject show_addressbook(String URL, String api)
+    public ArrayList<Address> show_addressbook(String URL, String api)
             throws JSONException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
@@ -351,7 +352,19 @@ public class HttpClientHelp {
             bufferedReader.close();
             JSONObject jsonObj = new JSONObject(stringBuffer.toString());
             Log.e("Addresses", jsonObj.toString());
-            return jsonObj;
+            ArrayList<Address> addressbook = new ArrayList<Address>();
+            JSONArray jsonArray = jsonObj.getJSONArray("addressbook");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject latlon = jsonArray.getJSONObject(i).getJSONObject("location");
+                jsonArray.getJSONObject(i).remove("location");
+                jsonArray.getJSONObject(i).put("latitude",latlon.get("latitude"));
+                jsonArray.getJSONObject(i).put("longitude",latlon.get("longitude"));
+                Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+                addressbook.add(gson.fromJson(jsonArray.getJSONObject(i).toString(), Address.class));
+                //Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+            }
+            Log.e("SIZE ADRESSBOOK", String.valueOf(addressbook.size()));
+            return addressbook;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
 

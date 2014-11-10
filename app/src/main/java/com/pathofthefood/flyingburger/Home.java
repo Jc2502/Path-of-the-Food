@@ -52,7 +52,9 @@ public class Home extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
+                Bundle extras = getIntent().getExtras();
+                Token = extras.getString("token");
+                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class).putExtra("token",Token);
                 startActivity(viewShoppingCartIntent);
             }
         });

@@ -1,20 +1,26 @@
 package com.pathofthefood.flyingburger;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCartActivity extends Activity {
 
-    Button checkout;
+    Button checkout, address;
+    private ArrayList<Address> addresses;
     private List<Product> mCartList;
     private ProductAdapter mProductAdapter;
 
@@ -23,6 +29,7 @@ public class ShoppingCartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
         checkout = (Button) findViewById(R.id.Button02);
+        address = (Button) findViewById(R.id.buttonAddress);
 
 
         mCartList = ShoppingCartHelper.getCartList();
@@ -58,6 +65,21 @@ public class ShoppingCartActivity extends Activity {
             }
         });
 
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = getIntent();
+                String id = intent.getStringExtra("token");
+                direcciones(id);
+
+            }
+        });
+
+    }
+
+    public void direcciones(String api) {
+        new AddressTask(getApplicationContext(), this.addresses, api).execute();
     }
 
     @Override
@@ -70,4 +92,58 @@ public class ShoppingCartActivity extends Activity {
         }
     }
 
+    class AddressTask extends AsyncTask<String, Void, Boolean> {
+
+        private Context context;
+        private ArrayList<Address> address;
+        private String message;
+        private String api;
+        private Bundle addressbook;
+
+        public AddressTask(Context context, ArrayList<Address> address, String api) {
+            this.context = context;
+            this.address = address;
+            this.api = api;
+
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            try {
+                HttpClientHelp clienteHttp = new HttpClientHelp();
+                this.address = clienteHttp.show_addressbook(CONFIG.SERVER_URL, api);
+                if (this.address.size() != 0) {
+                    Log.d("Address--->>>", this.address.get(0).toString());
+                    if (this.address == null) {
+                        this.message = "No existen Direcciones en tu libreta de direcciones";
+                    } else {
+                        addressbook = new Bundle();
+                        addressbook.putSerializable("addressbook", this.address);
+                        SharedPerferencesObjects<Address> shaEx = new SharedPerferencesObjects<Address>(this.context);
+                        for (Address addresses : address) {
+                            //shaEx.saveData(Address.class.getName() + "_" + addresses.getId(), addresses);
+                            Log.d("Address", Address.class.getName() + "_" + addresses.getId());
+                        }
+
+                    }
+                }
+                else{
+                    Log.e("Addressbook", "No Tiene Nada");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("Addressbook", "Error cargando direciones");
+            } catch (Exception e) {
+                Log.e("Addressbook", "Error inesperado");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            Log.d("AddressTask", "Entro onPostExecute");
+            startActivity(new Intent(this.context, AddressBook.class).putExtras(addressbook));
+        }
+    }
 }
