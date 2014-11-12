@@ -1,24 +1,25 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Address;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.pathofthefood.flyingburger.R;
 
 
-public class AddressBook extends Activity {
+public class NewAddress extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addressbook);
+        setContentView(R.layout.activity_new_address);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.address, menu);
+        getMenuInflater().inflate(R.menu.new_address, menu);
         return true;
     }
 

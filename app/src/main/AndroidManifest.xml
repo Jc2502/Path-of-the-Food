@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.pathofthefood.flyingburger">
+    package="com.pathofthefood.flyingburger" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
-                android:name=".Login"
-                android:label="@string/app_name">
+            android:name=".Login"
+            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".Home"
-                android:label="@string/title_activity_home">
+            android:name=".Home"
+            android:label="@string/title_activity_home" >
         </activity>
-        <activity android:name=".ProductDetailsActivity">
+        <activity android:name=".ProductDetailsActivity" >
         </activity>
-        <activity android:name=".ShoppingCartActivity">
+        <activity android:name=".ShoppingCartActivity" >
         </activity>
         <activity
-                android:name=".Map"
-                android:label="@string/title_activity_map">
+            android:name=".Map"
+            android:label="@string/title_activity_map" >
         </activity>
 
         <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"/>
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <!-- PC ASUS -->
 
         <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyD6DCIfDhAfCpbMEjXH46EynDVhQ8yh_g0"/>
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD6DCIfDhAfCpbMEjXH46EynDVhQ8yh_g0" />
 
         <!-- Hackintosh -->
         <!--
@@ -54,20 +54,24 @@
         -->
 
         <activity
-                android:name=".Information"
-                android:label="@string/title_activity_information">
+            android:name=".Information"
+            android:label="@string/title_activity_information" >
         </activity>
         <activity
-                android:name=".User_Register"
-                android:label="@string/title_activity_user__register">
+            android:name=".User_Register"
+            android:label="@string/title_activity_user__register" >
         </activity>
         <activity
-                android:name=".AddressBook"
-                android:label="@string/title_activity_address">
+            android:name=".Address.AddressBook"
+            android:label="@string/title_activity_address" >
         </activity>
         <activity
-                android:name=".AddressDetails"
-                android:label="@string/title_activity_address_details">
+            android:name=".Address.AddressDetails"
+            android:label="@string/title_activity_address_details" >
+        </activity>
+        <activity
+            android:name=".Address.NewAddress"
+            android:label="@string/title_activity_new_address" >
         </activity>
     </application>
 

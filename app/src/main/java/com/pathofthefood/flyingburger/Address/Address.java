@@ -1,9 +1,11 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Address;
+
+import java.io.Serializable;
 
 /**
  * Created by Juan Acosta on 11/9/2014.
  */
-public class Address {
+public class Address implements Serializable {
 
     public String id;
     public String user_id;

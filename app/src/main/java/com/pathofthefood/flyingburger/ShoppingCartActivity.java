@@ -12,6 +12,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.pathofthefood.flyingburger.Address.Address;
+import com.pathofthefood.flyingburger.Address.AddressBook;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -114,7 +116,7 @@ public class ShoppingCartActivity extends Activity {
                 HttpClientHelp clienteHttp = new HttpClientHelp();
                 this.address = clienteHttp.show_addressbook(CONFIG.SERVER_URL, api);
                 if (this.address.size() != 0) {
-                    Log.d("Address--->>>", this.address.get(0).toString());
+                    Log.d("Address--->>>", String.valueOf(this.address.get(0)));
                     if (this.address == null) {
                         this.message = "No existen Direcciones en tu libreta de direcciones";
                     } else {

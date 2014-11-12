@@ -10,5 +10,6 @@
     <string name="title_activity_user__register">Register</string>
     <string name="title_activity_address">Address</string>
     <string name="title_activity_address_details">AddressDetails</string>
+    <string name="title_activity_new_address">Add New Address</string>
 
 </resources>

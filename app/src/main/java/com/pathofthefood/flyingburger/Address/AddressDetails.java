@@ -1,9 +1,10 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Address;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.pathofthefood.flyingburger.R;
 
 
 public class AddressDetails extends Activity {
