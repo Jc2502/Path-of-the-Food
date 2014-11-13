@@ -12,5 +12,7 @@
     <string name="title_activity_address_details">AddressDetails</string>
     <string name="title_activity_new_address">Add New Address</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="check_internet">Please check the internet connection and try again</string>
+    <string name="error_field_required">This field is required</string>
 
 </resources>

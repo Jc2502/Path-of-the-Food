@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +20,9 @@ import org.json.JSONObject;
 
 public class Login extends Activity {
     String value, token, usr_id;
-    EditText User, Pass;
-    Button LogIn;
-    TextView registro;
+    EditText mUserEdit, mPassEdit;
+    Button LogInButton;
+    TextView registroTextView;
     boolean login = false;
 
     @Override
@@ -29,13 +30,13 @@ public class Login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        User = (EditText) findViewById(R.id.userText);
-        Pass = (EditText) findViewById(R.id.passwordText);
+        mUserEdit = (EditText) findViewById(R.id.userText);
+        mPassEdit = (EditText) findViewById(R.id.passwordText);
 
-        LogIn = (Button) findViewById(R.id.loginButton);
-        registro = (TextView) findViewById(R.id.textViewRegistro);
+        LogInButton = (Button) findViewById(R.id.loginButton);
+        registroTextView = (TextView) findViewById(R.id.textViewRegistro);
 
-        registro.setOnClickListener(new View.OnClickListener() {
+        registroTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), User_Register.class));
@@ -44,18 +45,41 @@ public class Login extends Activity {
             }
         });
 
-        LogIn.setOnClickListener(new View.OnClickListener() {
+        LogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!login) {
-                    String usr = User.getText().toString();
-                    String pass = Pass.getText().toString();
-                    Log.d("VALORES: ", usr + "||" + pass);
 
-                    if (usr.equals("") || pass.equals("")) {
-                        LogIn.setEnabled(true);
+                    if(!CONFIG.isOnline(getApplicationContext())){
+                        Toast.makeText(getApplicationContext(), R.string.check_internet,Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    mUserEdit.setError(null);
+
+                    mPassEdit.setError(null);
+
+
+                    String usr = mUserEdit.getText().toString();
+                    String pass = mPassEdit.getText().toString();
+                    boolean cancel = false;
+                    View focusView = null;
+                    if (TextUtils.isEmpty(usr)) {
+                        mUserEdit.setError(getString(R.string.error_field_required));
+                        focusView = mUserEdit;
+                        cancel = true;
+                    }
+
+                    if(TextUtils.isEmpty(pass) && !cancel){
+                        mPassEdit.setError(getString(R.string.error_field_required));
+                        focusView = mPassEdit;
+                        cancel  = true;
+                    }
+
+                    if (cancel) {
+                        LogInButton.setEnabled(true);
                         login = false;
-                        Toast.makeText(getApplicationContext(), "Alguno de los campos vacios", Toast.LENGTH_SHORT).show();
+                        focusView.requestFocus();
 
                     } else {
                         try {
@@ -74,7 +98,7 @@ public class Login extends Activity {
     }
 
     public void login(String usr, String pass) throws JSONException {
-        new LoginTask(getApplicationContext(), usr, pass, LogIn).execute();
+        new LoginTask(getApplicationContext(), usr, pass, LogInButton).execute();
     }
 
 
@@ -110,10 +134,10 @@ public class Login extends Activity {
                 Gson gson = new Gson();
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
-                if (value != null) {
-                    if (!jsonObject.getBoolean("error")) {
+                if (value != null && !jsonObject.getBoolean("error")) {
+
                         session.createLoginSession(gson.fromJson(jsonObject.getString("user"), User.class));
-                    }
+
 
                     token = jsonObject.getJSONObject("user").getString("api_token");
                     usr_id = jsonObject.getJSONObject("user").getString("id");
@@ -124,8 +148,7 @@ public class Login extends Activity {
                     id.putSerializable("usr_id", usr_id);
                     return false;
                 } else {
-                    this.message = "Error Login";
-                    Log.d("LoginTask", "ErrorLogin");
+                    this.message = "No se ha podido Iniciar Session";
                     return true;
                 }
             } catch (JSONException e) {
