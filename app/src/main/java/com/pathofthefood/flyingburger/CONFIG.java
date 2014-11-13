@@ -24,6 +24,11 @@ public class CONFIG {
     public static final String LON = "longitude";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    public static final int ERROR_JSON = 0;
+    public static final int ERROR_NOT_AUTH = 1;
+    public static final int DONE = -1;
+
+
     public static boolean isOnline(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);

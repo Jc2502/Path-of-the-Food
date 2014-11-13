@@ -543,7 +543,7 @@ public class HttpClientHelp {
 
     // Obtener informacion de Usuario
     public ArrayList<User> user_info(String URL, String api)
-            throws JSONException {
+            throws JSONException, NotAuthException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet request = new HttpGet(URL + CONFIG.USR_INFO);
@@ -562,6 +562,18 @@ public class HttpClientHelp {
             JSONObject jsonObj = new JSONObject(stringBuffer.toString());
 
             Log.e("USER_INFO-->", jsonObj.toString());
+
+            //Si el Status Code es diferente de 200 mandamos el error
+            if(response.getStatusLine().getStatusCode() != 200){
+                if(jsonObj.getBoolean("error")){
+                    String errorMsj = jsonObj.getString("message");
+                    if(errorMsj.equals("No Autenticado")){
+                        throw new NotAuthException(errorMsj, true);
+                    }
+
+                }
+
+            }
             ArrayList<User> user = new ArrayList<User>();
             for (int i = 0; i < jsonObj.length(); i = 2) {
                 user.add(gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class));

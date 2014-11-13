@@ -1,12 +1,15 @@
 package com.pathofthefood.flyingburger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pathofthefood.flyingburger.utils.SessionManager;
+
+import org.json.JSONException;
 
 
 public class SplashScreen extends Activity {
@@ -15,6 +18,7 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        new PrefetchData().execute();
     }
 
 
@@ -40,7 +44,7 @@ public class SplashScreen extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-   private class PrefetchData extends AsyncTask<Void, Void, Boolean>{
+   private class PrefetchData extends AsyncTask<Void, Void, Integer>{
        @Override
        protected void onPreExecute() {
            super.onPreExecute();
@@ -48,32 +52,44 @@ public class SplashScreen extends Activity {
        }
 
        @Override
-       protected Boolean doInBackground(Void... arg0) {
+       protected Integer doInBackground(Void... arg0) {
 
           if(session.isLoggedIn() && CONFIG.isOnline(getApplicationContext())){
-              return false;
+              //Obtenemos info del usuario
+              HttpClientHelp httpClientHelp = new HttpClientHelp();
+              try {
+                  httpClientHelp.user_info(CONFIG.SERVER_URL, session.getUserDetails().getApi_token());
+              } catch (JSONException e) {
+                  return CONFIG.ERROR_JSON;
+              } catch (NotAuthException e) {
+                  return CONFIG.ERROR_NOT_AUTH;
+              }
+
+              return CONFIG.DONE;
+          }else if(session.isLoggedIn() && !CONFIG.isOnline(getApplicationContext())){
+              return CONFIG.DONE;
           }
-           return true;
+           return CONFIG.ERROR_NOT_AUTH;
        }
 
        @Override
-       protected void onPostExecute(Boolean result) {
+       protected void onPostExecute(Integer result) {
            super.onPostExecute(result);
-          /* if(!result) {
-               Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-               i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-               getApplicationContext().startActivity(i);
-           }else{
-               //TODO: Si el usuario esta loggeado ver4ificar si tiene clave de notificaciones si no tiene registrar una
-               GcmRegManager gcmRegManager = new GcmRegManager(getApplicationContext());
-               gcmRegManager.registerGCM();
-               Intent i = new Intent(getApplicationContext(), MainActivity.class);
-               i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-               getApplicationContext().startActivity(i);
+
+           switch (result){
+               case CONFIG.DONE:
+                   startActivity(new Intent(getApplicationContext(), Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
+                   finish();
+                   break;
+               case CONFIG.ERROR_NOT_AUTH:
+                   startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
+                   finish();
+                   break;
+               default:
+                   startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
+                   finish();
+                   break;
            }
-           finish();*/
        }
     }
 

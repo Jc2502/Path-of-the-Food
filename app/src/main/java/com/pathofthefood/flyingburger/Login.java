@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.pathofthefood.flyingburger.utils.SessionManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,6 +89,7 @@ public class Login extends Activity {
         private String acPass;
         private String message;
         private Button loginButton;
+        private SessionManager session;
 
         public LoginTask(Context ctx, String acUser, String acPass, Button loginButton) {
             this.context = ctx;
@@ -92,6 +97,7 @@ public class Login extends Activity {
             this.acPass = acPass;
             this.loginButton = loginButton;
             this.loginButton.setEnabled(false);
+            this.session = new SessionManager(getApplicationContext());
 
         }
 
@@ -103,10 +109,14 @@ public class Login extends Activity {
             try {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
                 jsonObject = HttpClientHelp.Login(CONFIG.SERVER_URL, this.acUser, this.acPass);
-
+                Gson gson = new Gson();
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
                 if (value != null) {
+                    if(!jsonObject.getBoolean("error")){
+                        session.createLoginSession(gson.fromJson(jsonObject.getString("user"), User.class));
+                    }
+
                     token = jsonObject.getJSONObject("user").getString("api_token");
                     usr_id = jsonObject.getJSONObject("user").getString("id");
                     Log.e("Api_Token-->", token);
