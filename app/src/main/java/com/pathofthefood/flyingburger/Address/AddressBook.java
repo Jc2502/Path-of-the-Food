@@ -34,6 +34,7 @@ public class AddressBook extends Activity {
         address_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
                 startActivity(new Intent(getApplicationContext(),NewAddress.class));
             }
         });

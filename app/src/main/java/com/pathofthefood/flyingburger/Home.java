@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +24,7 @@ public class Home extends Activity {
     String Token;
     ArrayList<User> users;
     private List<Product> mProductList;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class Home extends Activity {
         LogOut = (Button) findViewById(R.id.buttonlogout);
         EditInfo = (Button) findViewById(R.id.buttonedit);
         Delete = (Button) findViewById(R.id.buttondelete);
+        session = new SessionManager(getApplicationContext());
 
         ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
         listViewCatalog.setAdapter(new ProductAdapter(mProductList, getLayoutInflater(), false));
@@ -52,9 +55,8 @@ public class Home extends Activity {
 
             @Override
             public void onClick(View v) {
-                Bundle extras = getIntent().getExtras();
-                Token = extras.getString("token");
-                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class).putExtra("token",Token);
+
+                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
                 startActivity(viewShoppingCartIntent);
             }
         });
@@ -62,20 +64,13 @@ public class Home extends Activity {
         LogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    Token = extras.getString("token");
-                    Log.e("EXTRAS", Token);
-                    // and get whatever type user account id is
-                    try {
-                        logout(Token);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d("NO EXTRA", "NO EXTRA");
+                try {
+                    logout(session.getUserDetails().getApi_token());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
@@ -83,19 +78,11 @@ public class Home extends Activity {
         EditInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    Token = extras.getString("token");
-                    Log.e("EXTRAS", Token);
-                    // and get whatever type user account id is
-                    try {
-                        user_info(Token);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d("NO EXTRA", "NO EXTRA");
+                try {
+                    user_info(session.getUserDetails().getApi_token());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -103,20 +90,11 @@ public class Home extends Activity {
         Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    String id = extras.getString("usr_id");
-                    Token = extras.getString("token");
-                    Log.e("EXTRAS", Token + "-----" + id);
-                    // and get whatever type user account id is
-                    try {
-                        delete_user(Token, id);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d("NO EXTRA", "NO EXTRA");
+
+                try {
+                    delete_user(session.getUserDetails().getApi_token(),session.getUserDetails().getId());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
             }
