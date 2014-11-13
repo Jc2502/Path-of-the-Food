@@ -77,15 +77,15 @@ public class SplashScreen extends Activity {
 
             switch (result) {
                 case CONFIG.DONE:
-                    startActivity(new Intent(getApplicationContext(), Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Home.class));
                     finish();
                     break;
                 case CONFIG.ERROR_NOT_AUTH:
-                    startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Login.class));
                     finish();
                     break;
                 default:
-                    startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Login.class));
                     finish();
                     break;
             }
