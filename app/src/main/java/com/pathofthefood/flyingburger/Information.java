@@ -21,6 +21,7 @@ public class Information extends Activity {
     Button edit, editpass;
     EditText usr, email, phone, fullname, pass1, pass2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

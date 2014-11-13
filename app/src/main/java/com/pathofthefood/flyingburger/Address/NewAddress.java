@@ -3,14 +3,13 @@ package com.pathofthefood.flyingburger.Address;
 /**
  * Created by Juan Acosta on 11/12/2014.
  */
+
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,16 +22,15 @@ import com.pathofthefood.flyingburger.R;
 public class NewAddress extends Activity {
 
     GoogleMap googleMap;
-    LatLng currentPosition;
-    LocationManager locationManager;
-    Criteria criteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_address);
         createMapView();
-        addMarker();
+        //addMarker();
+
+
     }
 
 
@@ -45,6 +43,12 @@ public class NewAddress extends Activity {
             if (null == googleMap) {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapViewNA)).getMap();
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(false);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLocation(), 18.0f));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(getLocation())
+                        .draggable(true));
 
                 /**
                  * If the map is still null after attempted initialisation,
@@ -60,27 +64,16 @@ public class NewAddress extends Activity {
         }
     }
 
-    /**
-     * Adds a marker to the map
-     */
-    private void addMarker() {
-
-        /** Make sure that the map has been initialised **/
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        criteria = new Criteria();
-        // Getting the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-        // Getting Current Location
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (null != googleMap) {
-            currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
-
-            googleMap.addMarker(new MarkerOptions()
-                            .position(currentPosition)
-                            .title("MI CASA")
-                            .draggable(true)
-            );
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));
+    private LatLng getLocation() {
+        LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String proveedor = manager.getBestProvider(criteria, true);
+        Location localizacion = manager.getLastKnownLocation(proveedor);
+        try {
+            return new LatLng(localizacion.getLatitude(),
+                    localizacion.getLongitude());
+        } catch (Exception e) {
+            return new LatLng(25.700336, -100.350814);
         }
     }
 }

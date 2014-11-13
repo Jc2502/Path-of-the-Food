@@ -5,12 +5,13 @@ package com.pathofthefood.flyingburger;
  */
 public class ResponseErrorCodeException extends Exception {
     private int errorCode;
-    public ResponseErrorCodeException(String message, int errorCode){
+
+    public ResponseErrorCodeException(String message, int errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public int getErrorCode(){
+    public int getErrorCode() {
         return this.errorCode;
     }
 }
