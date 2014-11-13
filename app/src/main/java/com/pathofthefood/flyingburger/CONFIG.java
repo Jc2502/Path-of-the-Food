@@ -1,6 +1,10 @@
 package com.pathofthefood.flyingburger;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 public class CONFIG {
     public static final String SERVER_URL = "http://pof.marinsalinas.com/api/v1/";
     public static final String LOGIN = "login";
@@ -19,4 +23,12 @@ public class CONFIG {
     public static final String LAT = "latitude";
     public static final String LON = "longitude";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
 }

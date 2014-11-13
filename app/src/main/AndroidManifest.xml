@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Login"
+            android:name="com.pathofthefood.flyingburger.SplashScreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,15 +25,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Home"
+            android:name="com.pathofthefood.flyingburger.Home"
             android:label="@string/title_activity_home" >
         </activity>
-        <activity android:name=".ProductDetailsActivity" >
+        <activity android:name="com.pathofthefood.flyingburger.ProductDetailsActivity" >
         </activity>
-        <activity android:name=".ShoppingCartActivity" >
+        <activity android:name="com.pathofthefood.flyingburger.ShoppingCartActivity" >
         </activity>
         <activity
-            android:name=".Map"
+            android:name="com.pathofthefood.flyingburger.Map"
             android:label="@string/title_activity_map" >
         </activity>
 
@@ -54,24 +54,29 @@
         -->
 
         <activity
-            android:name=".Information"
+            android:name="com.pathofthefood.flyingburger.Information"
             android:label="@string/title_activity_information" >
         </activity>
         <activity
-            android:name=".User_Register"
+            android:name="com.pathofthefood.flyingburger.User_Register"
             android:label="@string/title_activity_user__register" >
         </activity>
         <activity
-            android:name=".Address.AddressBook"
+            android:name="com.pathofthefood.flyingburger.Address.AddressBook"
             android:label="@string/title_activity_address" >
         </activity>
         <activity
-            android:name=".Address.AddressDetails"
+            android:name="com.pathofthefood.flyingburger.Address.AddressDetails"
             android:label="@string/title_activity_address_details" >
         </activity>
         <activity
-            android:name=".Address.NewAddress"
+            android:name="com.pathofthefood.flyingburger.Address.NewAddress"
             android:label="@string/title_activity_new_address" >
+        </activity>
+        <activity
+            android:name="com.pathofthefood.flyingburger.Login"
+            android:label="@string/app_name" >
+
         </activity>
     </application>
 
