@@ -16,6 +16,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         <activity
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar"
                 android:name="com.pathofthefood.flyingburger.SplashScreen"
                 android:label="@string/app_name">
 
