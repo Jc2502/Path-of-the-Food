@@ -1,5 +1,8 @@
 package com.pathofthefood.flyingburger.Address;
 
+/**
+ * Created by Juan Acosta on 11/12/2014.
+ */
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
