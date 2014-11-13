@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.pathofthefood.flyingburger.utils.SessionManager;
@@ -12,11 +13,13 @@ import org.json.JSONException;
 
 public class SplashScreen extends Activity {
     private SessionManager session;
+    private Handler mDrawerHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        mDrawerHandler = new Handler();
         new PrefetchData().execute();
     }
 
@@ -75,20 +78,61 @@ public class SplashScreen extends Activity {
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
 
+
+
             switch (result) {
                 case CONFIG.DONE:
-                    startActivity(new Intent(getApplicationContext(), Home.class));
-                    finish();
+                    mDrawerHandler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                startActivity(new Intent(getApplicationContext(), Home.class));
+                                finish();
+                            } catch (InterruptedException e) {
+
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 600);
+
                     break;
                 case CONFIG.ERROR_NOT_AUTH:
-                    startActivity(new Intent(getApplicationContext(), Login.class));
-                    finish();
+                    mDrawerHandler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                startActivity(new Intent(getApplicationContext(), Login.class));
+                                finish();
+                            } catch (InterruptedException e) {
+
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 600);
+
                     break;
                 default:
-                    startActivity(new Intent(getApplicationContext(), Login.class));
-                    finish();
+                    mDrawerHandler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                startActivity(new Intent(getApplicationContext(), Login.class));
+                                finish();
+                            } catch (InterruptedException e) {
+
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 600);
                     break;
             }
+
         }
     }
 
