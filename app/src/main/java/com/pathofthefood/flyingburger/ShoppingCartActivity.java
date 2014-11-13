@@ -130,8 +130,7 @@ public class ShoppingCartActivity extends Activity {
                         }
 
                     }
-                }
-                else{
+                } else {
                     Log.e("Addressbook", "No Tiene Nada");
                 }
             } catch (JSONException e) {

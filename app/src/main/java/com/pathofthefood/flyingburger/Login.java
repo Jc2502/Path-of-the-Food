@@ -11,10 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.pathofthefood.flyingburger.utils.SessionManager;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,7 +111,7 @@ public class Login extends Activity {
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
                 if (value != null) {
-                    if(!jsonObject.getBoolean("error")){
+                    if (!jsonObject.getBoolean("error")) {
                         session.createLoginSession(gson.fromJson(jsonObject.getString("user"), User.class));
                     }
 

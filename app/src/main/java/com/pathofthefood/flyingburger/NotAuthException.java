@@ -7,14 +7,13 @@ public class NotAuthException extends Exception {
 
     private boolean isAuth;
 
-    public NotAuthException(String message, boolean isAuth){
+    public NotAuthException(String message, boolean isAuth) {
         super(message);
         this.isAuth = isAuth;
     }
 
-    private boolean getIsAuth(){
+    private boolean getIsAuth() {
         return this.isAuth;
-    };
-
+    }
 
 }

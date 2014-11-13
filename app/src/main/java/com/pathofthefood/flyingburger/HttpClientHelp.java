@@ -333,59 +333,6 @@ public class HttpClientHelp {
         return null;
     }
 
-    //Obtener Direcciones
-    public ArrayList<Address> show_addressbook(String URL, String api)
-            throws JSONException {
-        BufferedReader bufferedReader = null;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet request = new HttpGet(URL + CONFIG.ADDRESS);
-        request.setHeader(CONFIG.API_HEADER, api);
-        Log.e("HEADER-->", api);
-        try {
-            HttpResponse response = httpClient.execute(request);
-            bufferedReader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
-            StringBuilder stringBuffer = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuffer.append(line);
-            }
-            bufferedReader.close();
-            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
-            Log.e("Addresses", jsonObj.toString());
-            ArrayList<Address> addressbook = new ArrayList<Address>();
-            JSONArray jsonArray = jsonObj.getJSONArray("addressbook");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject latlon = jsonArray.getJSONObject(i).getJSONObject("location");
-                jsonArray.getJSONObject(i).remove("location");
-                jsonArray.getJSONObject(i).put("latitude",latlon.get("latitude"));
-                jsonArray.getJSONObject(i).put("longitude",latlon.get("longitude"));
-                Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
-                addressbook.add(gson.fromJson(jsonArray.getJSONObject(i).toString(), Address.class));
-                //Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
-            }
-            Log.e("SIZE ADRESSBOOK", String.valueOf(addressbook.size()));
-            return addressbook;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                }
-            }
-        }
-        return null;
-    }
-
     //Obtener Direccion especifica
     public static JSONObject show_address(String URL, String api, String id)
             throws JSONException {
@@ -541,6 +488,59 @@ public class HttpClientHelp {
         return null;
     }
 
+    //Obtener Direcciones
+    public ArrayList<Address> show_addressbook(String URL, String api)
+            throws JSONException {
+        BufferedReader bufferedReader = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet request = new HttpGet(URL + CONFIG.ADDRESS);
+        request.setHeader(CONFIG.API_HEADER, api);
+        Log.e("HEADER-->", api);
+        try {
+            HttpResponse response = httpClient.execute(request);
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
+            Log.e("Addresses", jsonObj.toString());
+            ArrayList<Address> addressbook = new ArrayList<Address>();
+            JSONArray jsonArray = jsonObj.getJSONArray("addressbook");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject latlon = jsonArray.getJSONObject(i).getJSONObject("location");
+                jsonArray.getJSONObject(i).remove("location");
+                jsonArray.getJSONObject(i).put("latitude", latlon.get("latitude"));
+                jsonArray.getJSONObject(i).put("longitude", latlon.get("longitude"));
+                Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+                addressbook.add(gson.fromJson(jsonArray.getJSONObject(i).toString(), Address.class));
+                //Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+            }
+            Log.e("SIZE ADRESSBOOK", String.valueOf(addressbook.size()));
+            return addressbook;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
     // Obtener informacion de Usuario
     public ArrayList<User> user_info(String URL, String api)
             throws JSONException, NotAuthException {
@@ -564,10 +564,10 @@ public class HttpClientHelp {
             Log.e("USER_INFO-->", jsonObj.toString());
 
             //Si el Status Code es diferente de 200 mandamos el error
-            if(response.getStatusLine().getStatusCode() != 200){
-                if(jsonObj.getBoolean("error")){
+            if (response.getStatusLine().getStatusCode() != 200) {
+                if (jsonObj.getBoolean("error")) {
                     String errorMsj = jsonObj.getString("message");
-                    if(errorMsj.equals("No Autenticado")){
+                    if (errorMsj.equals("No Autenticado")) {
                         throw new NotAuthException(errorMsj, true);
                     }
 

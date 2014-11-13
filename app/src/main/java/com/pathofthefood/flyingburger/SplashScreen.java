@@ -6,14 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.pathofthefood.flyingburger.utils.SessionManager;
-
 import org.json.JSONException;
 
 
 public class SplashScreen extends Activity {
     private SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,53 +43,53 @@ public class SplashScreen extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-   private class PrefetchData extends AsyncTask<Void, Void, Integer>{
-       @Override
-       protected void onPreExecute() {
-           super.onPreExecute();
-           session = new SessionManager(getApplicationContext());
-       }
+    private class PrefetchData extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            session = new SessionManager(getApplicationContext());
+        }
 
-       @Override
-       protected Integer doInBackground(Void... arg0) {
+        @Override
+        protected Integer doInBackground(Void... arg0) {
 
-          if(session.isLoggedIn() && CONFIG.isOnline(getApplicationContext())){
-              //Obtenemos info del usuario
-              HttpClientHelp httpClientHelp = new HttpClientHelp();
-              try {
-                  httpClientHelp.user_info(CONFIG.SERVER_URL, session.getUserDetails().getApi_token());
-              } catch (JSONException e) {
-                  return CONFIG.ERROR_JSON;
-              } catch (NotAuthException e) {
-                  return CONFIG.ERROR_NOT_AUTH;
-              }
+            if (session.isLoggedIn() && CONFIG.isOnline(getApplicationContext())) {
+                //Obtenemos info del usuario
+                HttpClientHelp httpClientHelp = new HttpClientHelp();
+                try {
+                    httpClientHelp.user_info(CONFIG.SERVER_URL, session.getUserDetails().getApi_token());
+                } catch (JSONException e) {
+                    return CONFIG.ERROR_JSON;
+                } catch (NotAuthException e) {
+                    return CONFIG.ERROR_NOT_AUTH;
+                }
 
-              return CONFIG.DONE;
-          }else if(session.isLoggedIn() && !CONFIG.isOnline(getApplicationContext())){
-              return CONFIG.DONE;
-          }
-           return CONFIG.ERROR_NOT_AUTH;
-       }
+                return CONFIG.DONE;
+            } else if (session.isLoggedIn() && !CONFIG.isOnline(getApplicationContext())) {
+                return CONFIG.DONE;
+            }
+            return CONFIG.ERROR_NOT_AUTH;
+        }
 
-       @Override
-       protected void onPostExecute(Integer result) {
-           super.onPostExecute(result);
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
 
-           switch (result){
-               case CONFIG.DONE:
-                   startActivity(new Intent(getApplicationContext(), Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
-                   finish();
-                   break;
-               case CONFIG.ERROR_NOT_AUTH:
-                   startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
-                   finish();
-                   break;
-               default:
-                   startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK));
-                   finish();
-                   break;
-           }
-       }
+            switch (result) {
+                case CONFIG.DONE:
+                    startActivity(new Intent(getApplicationContext(), Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
+                    break;
+                case CONFIG.ERROR_NOT_AUTH:
+                    startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
+                    break;
+                default:
+                    startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
+                    break;
+            }
+        }
     }
 
 }

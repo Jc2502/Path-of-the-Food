@@ -3,6 +3,7 @@ package com.pathofthefood.flyingburger.Address;
 /**
  * Created by Juan Acosta on 11/12/2014.
  */
+
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
@@ -21,11 +22,6 @@ import com.pathofthefood.flyingburger.R;
 public class NewAddress extends Activity {
 
     GoogleMap googleMap;
-    Location location;
-    String provider;
-    LatLng currentPosition;
-    LocationManager locationManager;
-    Criteria criteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +69,10 @@ public class NewAddress extends Activity {
         Criteria criteria = new Criteria();
         String proveedor = manager.getBestProvider(criteria, true);
         Location localizacion = manager.getLastKnownLocation(proveedor);
-        try{
+        try {
             return new LatLng(localizacion.getLatitude(),
                     localizacion.getLongitude());
-        }catch(Exception e){
+        } catch (Exception e) {
             return new LatLng(25.700336, -100.350814);
         }
     }

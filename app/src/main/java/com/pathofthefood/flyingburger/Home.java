@@ -21,9 +21,9 @@ import java.util.List;
 
 public class Home extends Activity {
     Button LogOut, EditInfo, Delete;
-    String Token;
     ArrayList<User> users;
     private List<Product> mProductList;
+
     private SessionManager session;
 
     @Override
@@ -92,7 +92,7 @@ public class Home extends Activity {
             public void onClick(View v) {
 
                 try {
-                    delete_user(session.getUserDetails().getApi_token(),session.getUserDetails().getId());
+                    delete_user(session.getUserDetails().getApi_token(), session.getUserDetails().getId());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
