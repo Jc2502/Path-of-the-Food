@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Information extends Activity {
@@ -88,6 +89,7 @@ public class Information extends Activity {
         private String api, id, user, email, phone, fullname;
         private Button loginButton;
         private String message;
+        private HashMap<String, String> errors;
 
         public EditUserTask(Context ctx, String api, String id, String user, String email, String phone, String fullname, Button loginButton) {
             this.context = ctx;
@@ -111,15 +113,31 @@ public class Information extends Activity {
                 Log.d("LogoutTask", "Entra a doInBack..TRY");
                 jsonObject = HttpClientHelp.edit_user(CONFIG.SERVER_URL, this.api, this.id, this.user, this.email, this.phone, this.fullname);
                 value = jsonObject.toString();
-                Log.e("JSON  ", value);
-                if (value != null) {
-
-                    return false;
-                } else {
-                    this.message = "Error Logout";
+                if (value == null) {
+                    this.message = "Error Inesperado";
                     Log.d("LogoutTask", "ErrorLogout");
                     return true;
                 }
+
+
+
+                if(jsonObject.getBoolean("error") && jsonObject.has("messages")){
+                   errors = new HashMap<String, String>();
+                   JSONObject messages = jsonObject.getJSONObject("messages");
+                    if(messages.has("username")){
+                        errors.put("username", messages.getJSONArray("username").getString(0));
+                    }
+                    if(messages.has("phone")){
+                        errors.put("phone", messages.getJSONArray("phone").getString(0));
+                    }
+
+                    if(messages.has("email")){
+                        errors.put("email", messages.getJSONArray("email").getString(0));
+                    }
+                }
+
+
+                return false;
             } catch (JSONException e) {
                 e.printStackTrace();
                 this.message = "ERROR";
