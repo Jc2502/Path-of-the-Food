@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,7 @@ public class Information extends Activity {
     User users;
     String api, id;
     Button edit, editpass;
-    EditText usr, email, phone, fullname, pass1, pass2;
+    EditText mUserEdit, mEmailEdit, mPhoneEdit, mFullnameEdit, pass1, pass2;
 
 
     @Override
@@ -28,10 +29,10 @@ public class Information extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_info);
 
-        usr = (EditText) findViewById(R.id.editUser);
-        email = (EditText) findViewById(R.id.editEmail);
-        phone = (EditText) findViewById(R.id.editPhone);
-        fullname = (EditText) findViewById(R.id.editFullName);
+        mUserEdit = (EditText) findViewById(R.id.editUser);
+        mEmailEdit = (EditText) findViewById(R.id.editEmail);
+        mPhoneEdit = (EditText) findViewById(R.id.editPhone);
+        mFullnameEdit = (EditText) findViewById(R.id.editFullName);
         edit = (Button) findViewById(R.id.buttonedit);
         editpass = (Button) findViewById(R.id.buttoneditpass);
         pass1 = (EditText) findViewById(R.id.editpass1);
@@ -41,19 +42,50 @@ public class Information extends Activity {
         if (users != null) {
             api = users.getApi_token();
             id = users.getId();
-            usr.setText(users.getUsername());
-            email.setText(users.getEmail());
-            phone.setText(users.getPhone());
-            fullname.setText(users.getFullname());
+            mUserEdit.setText(users.getUsername());
+            mEmailEdit.setText(users.getEmail());
+            mPhoneEdit.setText(users.getPhone());
+            mFullnameEdit.setText(users.getFullname());
         }
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    edit_user(api, id, usr.getText().toString(), email.getText().toString(), phone.getText().toString(), fullname.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                String userS = mUserEdit.getText().toString();
+                String emailS = mEmailEdit.getText().toString();
+                String phoneS = mPhoneEdit.getText().toString();
+                String fullnameS = mFullnameEdit.getText().toString();
+
+                edit.setEnabled(false);
+                boolean cancel = false;
+                View focusView = null;
+                if (TextUtils.isEmpty(userS)) {
+                    mUserEdit.setError(getString(R.string.error_field_required));
+                    focusView = mUserEdit;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(emailS)) {
+                    mEmailEdit.setError(getString(R.string.error_field_required));
+                    focusView = mEmailEdit;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(phoneS)) {
+                    mPhoneEdit.setError(getString(R.string.error_field_required));
+                    focusView = mPhoneEdit;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(fullnameS)) {
+                    mFullnameEdit.setError(getString(R.string.error_field_required));
+                    focusView = mFullnameEdit;
+                    cancel = true;
+                }
+
+                if (cancel) {
+                    edit.setEnabled(true);
+                    focusView.requestFocus();
+                }else{
+                    edit_user(api, id, mUserEdit.getText().toString(), mEmailEdit.getText().toString(), mPhoneEdit.getText().toString(), mFullnameEdit.getText().toString());
                 }
             }
         });
@@ -75,7 +107,7 @@ public class Information extends Activity {
 
     }
 
-    public void edit_user(String token, String id, String user, String email, String phone, String fullname) throws JSONException {
+    public void edit_user(String token, String id, String user, String email, String phone, String fullname) {
         new EditUserTask(getApplicationContext(), token, id, user, email, phone, fullname, edit).execute();
     }
 
@@ -87,11 +119,11 @@ public class Information extends Activity {
         String value;
         private Context context;
         private String api, id, user, email, phone, fullname;
-        private Button loginButton;
+        private Button editButton;
         private String message;
         private HashMap<String, String> errors;
 
-        public EditUserTask(Context ctx, String api, String id, String user, String email, String phone, String fullname, Button loginButton) {
+        public EditUserTask(Context ctx, String api, String id, String user, String email, String phone, String fullname, Button editButton) {
             this.context = ctx;
             this.api = api;
             this.id = id;
@@ -99,8 +131,8 @@ public class Information extends Activity {
             this.email = email;
             this.phone = phone;
             this.fullname = fullname;
-            this.loginButton = loginButton;
-            this.loginButton.setEnabled(false);
+            this.editButton = editButton;
+            this.editButton.setEnabled(false);
 
         }
 
@@ -113,6 +145,7 @@ public class Information extends Activity {
                 Log.d("LogoutTask", "Entra a doInBack..TRY");
                 jsonObject = HttpClientHelp.edit_user(CONFIG.SERVER_URL, this.api, this.id, this.user, this.email, this.phone, this.fullname);
                 value = jsonObject.toString();
+                Log.d("EditUserTask", value);
                 if (value == null) {
                     this.message = "Error Inesperado";
                     Log.d("LogoutTask", "ErrorLogout");
@@ -122,7 +155,8 @@ public class Information extends Activity {
 
 
                 if(jsonObject.getBoolean("error") && jsonObject.has("messages")){
-                   errors = new HashMap<String, String>();
+                    Log.e("EditUserTask", "Error true, messages");
+                   this.errors = new HashMap<String, String>();
                    JSONObject messages = jsonObject.getJSONObject("messages");
                     if(messages.has("username")){
                         errors.put("username", messages.getJSONArray("username").getString(0));
@@ -134,13 +168,17 @@ public class Information extends Activity {
                     if(messages.has("email")){
                         errors.put("email", messages.getJSONArray("email").getString(0));
                     }
+                    return true;
+                }else if(jsonObject.getBoolean("error") && jsonObject.has("message")){
+                    Log.e("EditUserTask", "Error true, messages");
+                    this.message = jsonObject.getString("message");
+                    return true;
                 }
-
-
+                Log.e("EditUserTask", "Erro FALSE");
                 return false;
             } catch (JSONException e) {
                 e.printStackTrace();
-                this.message = "ERROR";
+                this.message = "Error Intesperado, intentalo de nuevo";
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -151,16 +189,33 @@ public class Information extends Activity {
 
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Boolean error) {
             Log.d("LogoutTask", "Entra a onPostExecute..");
-            this.loginButton.setEnabled(true);
-            if (!result) {
-
+            this.editButton.setEnabled(true);
+            //Si no hay error
+            if (!error && this.errors == null) {
                 Toast.makeText(this.context, "Usuario Editado!", Toast.LENGTH_SHORT).show();
                 onBackPressed();
                 finish();
 
-            } else {
+            } else if(error && this.errors != null) {
+                Toast.makeText(this.context, "Hay ERRORS", Toast.LENGTH_SHORT).show();
+
+                View focusView = null;
+                if(this.errors.containsKey("username")){
+                    mUserEdit.setError(this.errors.get("username"));
+                    focusView = mUserEdit;
+                }
+                if(this.errors.containsKey("email")){
+                    mEmailEdit.setError(this.errors.get("email"));
+                    focusView = mEmailEdit;
+                }
+                if(this.errors.containsKey("phone")){
+                    mPhoneEdit.setError(this.errors.get("phone"));
+                    focusView = mPhoneEdit;
+                }
+                focusView.requestFocus();
+            }else{
                 Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();
             }
         }
