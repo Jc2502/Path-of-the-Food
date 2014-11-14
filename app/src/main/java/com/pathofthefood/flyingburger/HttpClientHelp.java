@@ -542,7 +542,7 @@ public class HttpClientHelp {
     }
 
     // Obtener informacion de Usuario
-    public ArrayList<User> user_info(String URL, String api)
+    public User user_info(String URL, String api)
             throws JSONException, NotAuthException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
@@ -574,11 +574,8 @@ public class HttpClientHelp {
                 }
 
             }
-            ArrayList<User> user = new ArrayList<User>();
-            for (int i = 0; i < jsonObj.length(); i = 2) {
-                user.add(gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class));
-                Log.e("JSONOBJ", jsonObj.getJSONObject("user").toString());
-            }
+            User user = null;
+                user = gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class);
             return user;
         } catch (ClientProtocolException e) {
             e.printStackTrace();

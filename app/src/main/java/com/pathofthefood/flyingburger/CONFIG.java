@@ -26,6 +26,8 @@ public class CONFIG {
 
     public static final int ERROR_JSON = 0;
     public static final int ERROR_NOT_AUTH = 1;
+    public static final int ERROR_NULL = 2;
+
     public static final int DONE = -1;
 
 

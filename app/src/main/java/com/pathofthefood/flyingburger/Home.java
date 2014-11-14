@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Home extends Activity {
     Button LogOut, EditInfo, Delete;
-    ArrayList<User> users;
+
     private List<Product> mProductList;
 
     private SessionManager session;
@@ -78,8 +78,13 @@ public class Home extends Activity {
         EditInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!CONFIG.isOnline(getApplicationContext())){
+                    Toast.makeText(getApplicationContext(), R.string.check_internet,Toast.LENGTH_LONG).show();
+                    return;
+                }
                 try {
-                    user_info(session.getUserDetails().getApi_token());
+                    user_info();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -105,8 +110,8 @@ public class Home extends Activity {
         new LogOutTask(getApplicationContext(), token, LogOut).execute();
     }
 
-    public void user_info(String token) throws JSONException {
-        new UserInfoTask(getApplicationContext(), token, EditInfo, users).execute();
+    public void user_info() throws JSONException {
+        new UserInfoTask(getApplicationContext(), EditInfo).execute();
     }
 
     public void delete_user(String token, String api) throws JSONException {
@@ -244,75 +249,80 @@ public class Home extends Activity {
 
     }
 
-    class UserInfoTask extends AsyncTask<String, Void, Boolean> {
+    class UserInfoTask extends AsyncTask<String, Void, Integer> {
 
 
         private Context context;
-        private String api;
         private Button editButton;
-        private ArrayList<User> users;
+        private User  user;
         private String message;
         private Bundle informacion;
+        private SessionManager session;
 
-        public UserInfoTask(Context ctx, String api, Button editButton, ArrayList<User> users) {
+        public UserInfoTask(Context ctx, Button editButton) {
             this.context = ctx;
-            this.api = api;
-            this.users = users;
             this.editButton = editButton;
             this.editButton.setEnabled(false);
+            session = new SessionManager(getApplicationContext());
 
         }
 
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected Integer doInBackground(String... params) {
             Log.d("UserInfoTask", "Entra a doInBack..");
 
-            try {
+
                 Log.d("UserInfoTask", "Entra a doInBack..TRY");
                 HttpClientHelp client = new HttpClientHelp();
-                this.users = client.user_info(CONFIG.SERVER_URL, this.api);
 
-                if (this.users == null) {
+                if (session.isLoggedIn() && CONFIG.isOnline(getApplicationContext())) {
+                    //Obtenemos info del usuario
+                    HttpClientHelp httpClientHelp = new HttpClientHelp();
+                    try {
+                        this.user = httpClientHelp.user_info(CONFIG.SERVER_URL, session.getUserDetails().getApi_token());
+                        if (this.user == null) {
+                            this.message = "NO EXISTE";
+                            Log.d("EditTask", "ErrorEdit");
+                            //Nulll
+                            return CONFIG.ERROR_NULL;
+                        } else {
+                            informacion = new Bundle();
+                            informacion.putSerializable("users", this.user);
 
-                    this.message = "NO EXISTE";
-                    Log.d("EditTask", "ErrorEdit");
-                    return true;
-                } else {
-
-                    User user = new User();
-                    user = this.users.get(0);
-                    Log.e("Users", String.valueOf(user.getEmail()));
-                    informacion = new Bundle();
-                    informacion.putSerializable("users", this.users);
-
-                    return false;
+                            return CONFIG.DONE;
+                        }
+                    } catch (JSONException e) {
+                        return CONFIG.ERROR_JSON;
+                    } catch (NotAuthException e) {
+                        return CONFIG.ERROR_NOT_AUTH;
+                    }
+                } else if (session.isLoggedIn() && !CONFIG.isOnline(getApplicationContext())) {
+                    return CONFIG.DONE;
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                this.message = "Error";
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                this.message = "Error Inesperado";
-                return true;
+                return CONFIG.ERROR_NOT_AUTH;
             }
-        }
+
 
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Integer result) {
             Log.d("EditInfo", "Entra a onPostExecute..");
             this.editButton.setEnabled(true);
-            if (!result) {
-
-                Toast.makeText(this.context, "Edit User Info", Toast.LENGTH_SHORT).show();
-                Intent edituser = new Intent(this.context, Information.class);
-                edituser.putExtras(informacion);
-                startActivity(edituser);
-
-            } else {
-                Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();
+            switch (result) {
+                case CONFIG.DONE:
+                    Intent edituser = new Intent(this.context, Information.class);
+                    edituser.putExtras(informacion);
+                    startActivity(edituser);
+                    break;
+                case CONFIG.ERROR_NOT_AUTH:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finish();
+                    break;
+                default:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finish();
+                    break;
             }
         }
 
