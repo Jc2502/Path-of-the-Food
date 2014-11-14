@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 
 public class Information extends Activity {
-    ArrayList<User> users;
+    User users;
     String api, id;
     Button edit, editpass;
     EditText usr, email, phone, fullname, pass1, pass2;
@@ -36,15 +36,14 @@ public class Information extends Activity {
         pass1 = (EditText) findViewById(R.id.editpass1);
         pass2 = (EditText) findViewById(R.id.editpass2);
 
-        users = (ArrayList<User>) getIntent().getSerializableExtra("users");
-        if (users.size() > 0) {
-            User usuario = users.get(0);
-            api = usuario.getApi_token();
-            id = usuario.getId();
-            usr.setText(usuario.getUsername());
-            email.setText(usuario.getEmail());
-            phone.setText(usuario.getPhone());
-            fullname.setText(usuario.getFullname());
+        users = (User) getIntent().getSerializableExtra("users");
+        if (users != null) {
+            api = users.getApi_token();
+            id = users.getId();
+            usr.setText(users.getUsername());
+            email.setText(users.getEmail());
+            phone.setText(users.getPhone());
+            fullname.setText(users.getFullname());
         }
 
         edit.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +177,6 @@ public class Information extends Activity {
                 value = jsonObject.toString();
                 Log.e("JSON  ", value);
                 if (value != null) {
-
                     return false;
                 } else {
                     this.message = "Error Logout";
