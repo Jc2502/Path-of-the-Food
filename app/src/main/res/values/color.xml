@@ -2,8 +2,8 @@
 <resources>
     <color name="material_red_100">#fff4c7c3</color>
     <color name="material_red_A400">#ffff1744</color>
-    <color name="primary">#3f51b5</color>
-    <color name="primary_pressed">#303f9f</color>
+    <color name="primary">#e65100</color>
+    <color name="primary_pressed">#FFB74D</color>
     <color name="ripple">#ff80ab</color>
     <color name="accent">#ff4081</color>
     <color name="accent_pressed">#f50057</color>

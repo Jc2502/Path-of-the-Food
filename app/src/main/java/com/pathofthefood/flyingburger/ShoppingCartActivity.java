@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.Address.Address;
 import com.pathofthefood.flyingburger.Address.AddressBook;
 import com.pathofthefood.flyingburger.utils.SessionManager;
@@ -22,7 +23,8 @@ import java.util.List;
 
 public class ShoppingCartActivity extends Activity {
 
-    Button checkout, address;
+    Button  address;
+    FloatingActionButton checkout;
     private ArrayList<Address> addresses;
     private List<Product> mCartList;
     private ProductAdapter mProductAdapter;
@@ -33,7 +35,7 @@ public class ShoppingCartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
         session = new SessionManager(getApplicationContext());
-        checkout = (Button) findViewById(R.id.Button02);
+        checkout = (FloatingActionButton) findViewById(R.id.fab_shop);
         address = (Button) findViewById(R.id.buttonAddress);
 
 

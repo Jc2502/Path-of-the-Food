@@ -13,7 +13,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -100,7 +99,7 @@ public class Information extends Activity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                    pass2.setError("Las contraseñas no coinciden");
                 }
             }
         });
@@ -148,7 +147,7 @@ public class Information extends Activity {
                 Log.d("EditUserTask", value);
                 if (value == null) {
                     this.message = "Error Inesperado";
-                    Log.d("LogoutTask", "ErrorLogout");
+                    Log.d("UserEdit", "ErrorLogout");
                     return true;
                 }
 
@@ -270,7 +269,7 @@ public class Information extends Activity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            Log.d("LogoutTask", "Entra a onPostExecute..");
+            Log.d("PasswordEditTask", "Entra a onPostExecute..");
             this.loginButton.setEnabled(true);
             if (!result) {
 

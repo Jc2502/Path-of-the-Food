@@ -19,15 +19,22 @@ public class Map extends Activity {
     /**
      * Local variables *
      */
+    GPSTracker gps;
     GoogleMap googleMap;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        gps = new GPSTracker(Map.this);
         createMapView();
         addMarker();
     }
+
 
     private void createMapView() {
         /**
@@ -66,14 +73,22 @@ public class Map extends Activity {
         // Getting Current Location
         Location location = locationManager.getLastKnownLocation(provider);
         if (null != googleMap) {
-            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng currentPosition;
+            if(gps.canGetLocation()) {
 
-            googleMap.addMarker(new MarkerOptions()
-                            .position(currentPosition)
-                            .title("MI CASA")
-                            .draggable(true)
-            );
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                currentPosition = new LatLng(latitude, longitude);
+                googleMap.addMarker(new MarkerOptions()
+                                .position(currentPosition)
+                                .title("MI CASA")
+                                .draggable(true)
+                );
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));
+            }
+           else{
+                gps.showSettingsAlert();
+            }
         }
     }
 

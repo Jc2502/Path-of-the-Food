@@ -9,6 +9,8 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
 
     <application
             android:allowBackup="true"
@@ -37,6 +39,7 @@
         </activity>
         <activity
                 android:name="com.pathofthefood.flyingburger.Map"
+                android:noHistory="true"
                 android:label="@string/title_activity_map">
         </activity>
 
@@ -45,9 +48,9 @@
                 android:value="@integer/google_play_services_version"/>
         <!-- PC ASUS -->
 
-        <!--<meta-data
+        <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyD6DCIfDhAfCpbMEjXH46EynDVhQ8yh_g0"/>-->
+                android:value="AIzaSyD6DCIfDhAfCpbMEjXH46EynDVhQ8yh_g0"/>
 
         <!-- Hackintosh -->
         <!--
@@ -56,34 +59,36 @@
             android:value="AIzaSyDkhunK1RN7pIiLgZBGaVBrjeDiDkcci2Y" />
         -->
         <!--MARIN LAPTOP TRBAJO-->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyANSbkyJ-F-JVk7nYNeoRDpH19fQuTANCI"/>
+        <!--
+       <meta-data
+           android:name="com.google.android.maps.v2.API_KEY"
+           android:value="AIzaSyANSbkyJ-F-JVk7nYNeoRDpH19fQuTANCI"/>
+        -->
 
-        <activity
-                android:name="com.pathofthefood.flyingburger.Information"
-                android:label="@string/title_activity_information">
-        </activity>
-        <activity
-                android:name="com.pathofthefood.flyingburger.User_Register"
-                android:label="@string/title_activity_user__register">
-        </activity>
-        <activity
-                android:name="com.pathofthefood.flyingburger.Address.AddressBook"
-                android:label="@string/title_activity_address">
-        </activity>
-        <activity
-                android:name="com.pathofthefood.flyingburger.Address.AddressDetails"
-                android:label="@string/title_activity_address_details">
-        </activity>
-        <activity
-                android:name="com.pathofthefood.flyingburger.Address.NewAddress"
-                android:label="@string/title_activity_new_address">
-        </activity>
-        <activity
-                android:name="com.pathofthefood.flyingburger.Login"
-                android:label="@string/app_name">
-        </activity>
-    </application>
+       <activity
+               android:name="com.pathofthefood.flyingburger.Information"
+               android:label="@string/title_activity_information">
+       </activity>
+       <activity
+               android:name="com.pathofthefood.flyingburger.User_Register"
+               android:label="@string/title_activity_user__register">
+       </activity>
+       <activity
+               android:name="com.pathofthefood.flyingburger.Address.AddressBook"
+               android:label="@string/title_activity_address">
+       </activity>
+       <activity
+               android:name="com.pathofthefood.flyingburger.Address.AddressDetails"
+               android:label="@string/title_activity_address_details">
+       </activity>
+       <activity
+               android:name="com.pathofthefood.flyingburger.Address.NewAddress"
+               android:label="@string/title_activity_new_address">
+       </activity>
+       <activity
+               android:name="com.pathofthefood.flyingburger.Login"
+               android:label="@string/app_name">
+       </activity>
+   </application>
 
 </manifest>

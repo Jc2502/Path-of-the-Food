@@ -1,8 +1,10 @@
 package com.pathofthefood.flyingburger;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -15,6 +17,7 @@ public class SplashScreen extends Activity {
     private SessionManager session;
     private Handler mDrawerHandler;
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,7 @@ public class SplashScreen extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private class PrefetchData extends AsyncTask<Void, Void, Integer> {
         @Override
         protected void onPreExecute() {
