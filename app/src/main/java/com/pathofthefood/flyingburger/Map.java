@@ -21,10 +21,6 @@ public class Map extends Activity {
      */
     GPSTracker gps;
     GoogleMap googleMap;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +60,6 @@ public class Map extends Activity {
      * Adds a marker to the map
      */
     private void addMarker() {
-
-        /** Make sure that the map has been initialised **/
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        // Getting the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-        // Getting Current Location
-        Location location = locationManager.getLastKnownLocation(provider);
         if (null != googleMap) {
             LatLng currentPosition;
             if(gps.canGetLocation()) {

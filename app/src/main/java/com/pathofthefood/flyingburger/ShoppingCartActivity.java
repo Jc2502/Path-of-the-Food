@@ -68,7 +68,6 @@ public class ShoppingCartActivity extends Activity {
 
                 Toast.makeText(getApplicationContext(), "PEDIDO LISTO", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getApplicationContext(), Map.class));
-                finish();
             }
         });
 
@@ -76,7 +75,8 @@ public class ShoppingCartActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                direcciones(session.getUserDetails().getApi_token());
+                //direcciones(session.getUserDetails().getApi_token());
+                startActivity(new Intent(getApplicationContext(), AddressBook.class));
 
             }
         });
