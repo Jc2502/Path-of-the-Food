@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.pathofthefood.flyingburger.Address.AddressBook;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 
@@ -93,7 +95,7 @@ public class SplashScreen extends Activity {
                         public void run() {
                             try {
                                 Thread.sleep(1000);
-                                startActivity(new Intent(getApplicationContext(), Home.class));
+                                startActivity(new Intent(getApplicationContext(), AddressBook.class));
                                 finish();
                             } catch (InterruptedException e) {
 
