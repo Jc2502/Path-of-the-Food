@@ -2,49 +2,68 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:id="@+id/LinearLayoutItem">
 
-    <LinearLayout android:id="@+id/linearLayoutDetails"
-                  android:orientation="vertical"
-                  android:layout_marginTop="@dimen/abc_text_size_small_material"
-                  android:layout_marginBottom="@dimen/abc_text_size_small_material"
-                  android:layout_marginLeft="@dimen/abc_text_size_small_material"
-                  android:layout_marginRight="@dimen/abc_text_size_small_material"
-                  android:layout_height="fill_parent"
-                  android:layout_width="fill_parent"
 
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/abc_text_size_small_material"
+            android:layout_marginBottom="@dimen/abc_text_size_small_material"
+            android:layout_marginLeft="@dimen/abc_text_size_small_material"
+            android:layout_marginRight="@dimen/abc_text_size_small_material"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
             >
+        <LinearLayout android:id="@+id/linearLayoutAdapter"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content"
+                      android:layout_weight=".5"
+                      android:layout_width="0dp"
+                      android:layout_gravity="start"
+                >
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/TextViewAddresName"
+                      android:textColor="@android:color/black"
+                      android:textSize="@dimen/abc_text_size_title_material"
+                      android:text="Address Title"
+                      android:maxWidth="150dip"/>
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:id="@+id/TextViewAddresName"
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/abc_text_size_title_material"
-                  android:text="Address Title"
-                  android:maxWidth="150dip"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="2dp"
+                      android:text="Descripcion"
+                      android:textColor="@android:color/black"
+                      android:textSize="@dimen/abc_text_size_small_material"
+                      android:ellipsize="end"
+                      android:singleLine="true"
+                      android:id="@+id/textViewDescriptionAddres"/>
 
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="2dp"
-                  android:text="Descripcion"
-                  android:textColor="@android:color/black"
-                  android:textSize="15sp"
-                  android:ellipsize="end"
-                  android:singleLine="true"
-                  android:id="@+id/textViewDescriptionAddres"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="2dp"
+                      android:text="Descripcion"
+                      android:textSize="@dimen/abc_text_size_small_material"
+                      android:textColor="@android:color/darker_gray"
+                      android:ellipsize="end"
+                      android:singleLine="true"
+                      android:id="@+id/textViewTextAddres"/>
 
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="2sp"
-                  android:text="Descripcion"
-                  android:textSize="15sp"
-                  android:textColor="@android:color/darker_gray"
-                  android:ellipsize="end"
-                  android:singleLine="true"
-                  android:id="@+id/textViewTextAddres"/>
+        </LinearLayout>
 
+        <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_content_clear"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1"
+                />
 
     </LinearLayout>
+
+
 </LinearLayout>
