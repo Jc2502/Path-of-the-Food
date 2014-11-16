@@ -6,9 +6,6 @@ package com.pathofthefood.flyingburger.Address;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,11 +33,11 @@ import java.util.HashMap;
 public class NewAddress extends Activity {
 
     GoogleMap googleMap;
-    EditText mLabel,mDescription,mTextAddress;
+    EditText mLabel, mDescription, mTextAddress;
     GPSTracker gps;
     Button save;
+    double latitude, longitude;
     private SessionManager session;
-    double latitude ,longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +76,8 @@ public class NewAddress extends Activity {
                 if (cancel) {
                     save.setEnabled(true);
                     focusView.requestFocus();
-                }else{
-                    edit_user(session.getUserDetails().getApi_token(), mLabel.getText().toString(), mDescription.getText().toString(), mTextAddress.getText().toString(), String.valueOf(latitude),String.valueOf(longitude));
+                } else {
+                    edit_user(session.getUserDetails().getApi_token(), mLabel.getText().toString(), mDescription.getText().toString(), mTextAddress.getText().toString(), String.valueOf(latitude), String.valueOf(longitude));
                 }
 
             }
@@ -104,7 +101,7 @@ public class NewAddress extends Activity {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapViewNA)).getMap();
                 LatLng currentPosition;
-                if(gps.canGetLocation()) {
+                if (gps.canGetLocation()) {
 
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
@@ -117,8 +114,7 @@ public class NewAddress extends Activity {
                             .draggable(true));
 
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18.0f));
-                }
-                else{
+                } else {
                     gps.showSettingsAlert();
                 }
 
@@ -131,6 +127,7 @@ public class NewAddress extends Activity {
             Log.e("mapApp", exception.toString());
         }
     }
+
     class AddAddressTask extends AsyncTask<String, Void, Boolean> {
         String value;
         private Context context;
@@ -169,23 +166,22 @@ public class NewAddress extends Activity {
                 }
 
 
-
-                if(jsonObject.getBoolean("error") && jsonObject.has("messages")){
+                if (jsonObject.getBoolean("error") && jsonObject.has("messages")) {
                     Log.e("EditUserTask", "Error true, messages");
                     this.errors = new HashMap<String, String>();
                     JSONObject messages = jsonObject.getJSONObject("messages");
-                    if(messages.has("label")){
+                    if (messages.has("label")) {
                         errors.put("label", messages.getJSONArray("label").getString(0));
                     }
-                    if(messages.has("description")){
+                    if (messages.has("description")) {
                         errors.put("description", messages.getJSONArray("description").getString(0));
                     }
 
-                    if(messages.has("textaddress")){
+                    if (messages.has("textaddress")) {
                         errors.put("textaddress", messages.getJSONArray("textaddress").getString(0));
                     }
                     return true;
-                }else if(jsonObject.getBoolean("error") && jsonObject.has("message")){
+                } else if (jsonObject.getBoolean("error") && jsonObject.has("message")) {
                     Log.e("EditUserTask", "Error true, messages");
                     this.message = jsonObject.getString("message");
                     return true;
@@ -214,24 +210,24 @@ public class NewAddress extends Activity {
                 onBackPressed();
                 finish();
 
-            } else if(error && this.errors != null) {
+            } else if (error && this.errors != null) {
                 Toast.makeText(this.context, "Hay ERRORES", Toast.LENGTH_SHORT).show();
 
                 View focusView = null;
-                if(this.errors.containsKey("label")){
+                if (this.errors.containsKey("label")) {
                     mLabel.setError(this.errors.get("label"));
                     focusView = mDescription;
                 }
-                if(this.errors.containsKey("description")){
+                if (this.errors.containsKey("description")) {
                     mDescription.setError(this.errors.get("description"));
                     focusView = mDescription;
                 }
-                if(this.errors.containsKey("textaddress")){
+                if (this.errors.containsKey("textaddress")) {
                     mTextAddress.setError(this.errors.get("textaddress"));
                     focusView = mTextAddress;
                 }
                 focusView.requestFocus();
-            }else{
+            } else {
                 Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();
             }
         }

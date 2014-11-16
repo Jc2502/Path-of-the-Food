@@ -15,17 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-
 import com.melnykov.fab.FloatingActionButton;
-import com.pathofthefood.flyingburger.CONFIG;
-import com.pathofthefood.flyingburger.HttpClientHelp;
-import com.pathofthefood.flyingburger.Login;
-import com.pathofthefood.flyingburger.NotAuthException;
-import com.pathofthefood.flyingburger.R;
+import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.ldrawer_library.ActionBarDrawerToggle;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
 import com.pathofthefood.flyingburger.utils.SessionManager;
-
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -33,6 +27,8 @@ import java.util.ArrayList;
 public class AddressBook extends Activity implements AdapterView.OnItemClickListener {
 
     FloatingActionButton address_add;
+    View v1;
+    TextView tvu, tvm;
     private ListView AddressList;
     private ArrayList<Address> addressess;
     private AddressAdapter adapter;
@@ -43,8 +39,6 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     private ListView leftDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
-    View v1;
-    TextView tvu,tvm;
     private String[] leftSliderData = {"Home", "Android", "Tech Zone", "Sitemap", "About", "Contact Me"};
 
 
@@ -77,7 +71,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
-        navigationDrawerAdapter=new ArrayAdapter<String>( AddressBook.this,android.R.layout.simple_list_item_1, leftSliderData);
+        navigationDrawerAdapter = new ArrayAdapter<String>(AddressBook.this, android.R.layout.simple_list_item_1, leftSliderData);
         leftDrawerList.setAdapter(navigationDrawerAdapter);
         leftDrawerList.setOnItemClickListener(this);
         v1 = getLayoutInflater().inflate(R.layout.header, null);
@@ -98,7 +92,6 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     }
 
 
-
     private void initDrawer() {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,7 +102,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
             }
         };
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawer,drawerArrow, R.string.drawer_open,R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawer, drawerArrow, R.string.drawer_open, R.string.drawer_close) {
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
@@ -142,6 +135,13 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        this.onCreate(null);
     }
 
     class AddressTask extends AsyncTask<String, Void, Integer> {
@@ -187,25 +187,27 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                 case CONFIG.DONE:
                     Log.d("AddressTask", "Entro onPostExecute");
                     addressess = this.address;
-                    if (addressess != null) {
-                        adapter = new AddressAdapter(getApplicationContext(), addressess);
-                        Log.e("ARRAYLIST", String.valueOf(addressess.get(0)));
-                        AddressList.setAdapter(adapter);
-                        address_add.attachToListView(AddressList);
-                    } else {
-                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddressBook.this);
-                        alertDialog.setTitle("Alertas");
-                        alertDialog.setMessage("No Direcciones registradas");
-                        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertDialog.show();
-                    }
+                    adapter = new AddressAdapter(getApplicationContext(), addressess);
+                    Log.e("ARRAYLIST", String.valueOf(addressess.get(0)));
+                    adapter.notifyDataSetChanged();
+                    AddressList.setAdapter(adapter);
+                    address_add.attachToListView(AddressList);
+
                     break;
                 case CONFIG.ERROR_NOT_AUTH:
                     startActivity(new Intent(getApplicationContext(), Login.class));
+                    break;
+                case CONFIG.ERROR_NULL:
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddressBook.this);
+                    alertDialog.setTitle("Alertas");
+                    alertDialog.setMessage("No Direcciones registradas");
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                    break;
                 default:
                     startActivity(new Intent(getApplicationContext(), Login.class));
                     break;
@@ -213,12 +215,5 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
 
 
         }
-    }
-
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-        this.onCreate(null);
     }
 }

@@ -488,6 +488,53 @@ public class HttpClientHelp {
         return null;
     }
 
+    public static JSONObject delete_address(String URL, String api, String id) throws JSONException, NotAuthException {
+        BufferedReader bufferedReader = null;
+        JSONObject jsonObject;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpDelete request = new HttpDelete(URL + CONFIG.ADDRESS + "/" + id);
+        request.setHeader(CONFIG.API_HEADER, api);
+        try {
+
+            HttpResponse response = httpClient.execute(request);
+
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            jsonObject = new JSONObject(stringBuffer.toString());
+
+            CONFIG.isAuth(response, jsonObject);
+
+            return jsonObject;
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            Log.d("ClientProtocolException", e.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Log.d("Exception", e.toString());
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
     //Obtener Direcciones
     public ArrayList<Address> show_addressbook(String URL, String api)
             throws JSONException, NotAuthException {
@@ -579,7 +626,7 @@ public class HttpClientHelp {
 
             }
             User user = null;
-                user = gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class);
+            user = gson.fromJson(jsonObj.getJSONObject("user").toString(), User.class);
             return user;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
