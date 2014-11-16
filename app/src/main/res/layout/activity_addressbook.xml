@@ -43,15 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <ListView
-            android:id="@+id/left_drawer"
-            android:layout_gravity="left"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:divider="@color/divider"
-            android:background="@android:color/white"
-            android:dividerHeight="1dp"/>
+
+        <ListView
+                android:id="@+id/list_view_drawer"
+                android:layout_gravity="left"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:divider="@color/divider"
+                android:choiceMode="singleChoice"
+                android:background="@android:color/white"
+                android:dividerHeight="1dp"/>
 
 </android.support.v4.widget.DrawerLayout>

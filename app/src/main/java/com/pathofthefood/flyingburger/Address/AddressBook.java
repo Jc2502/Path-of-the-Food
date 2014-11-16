@@ -14,11 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.*;
 
-import android.widget.Toast;
 import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.CONFIG;
 import com.pathofthefood.flyingburger.HttpClientHelp;
@@ -42,9 +39,12 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     private SessionManager session;
     private ArrayAdapter<String> navigationDrawerAdapter;
     private DrawerLayout drawer;
+    private RelativeLayout mDrawerRelativeLayout;
     private ListView leftDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
+    View v1;
+    TextView tvu,tvm;
     private String[] leftSliderData = {"Home", "Android", "Tech Zone", "Sitemap", "About", "Contact Me"};
 
 
@@ -52,9 +52,11 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addressbook);
-        init();
-        initDrawer();
         session = new SessionManager(getApplicationContext());
+        init();
+
+        initDrawer();
+
 
         AddressList = (ListView) findViewById(R.id.ListViewAddress);
         address_add = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,10 +76,19 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     private void init() {
         getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        leftDrawerList = (ListView) findViewById(R.id.left_drawer);
+        leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
         navigationDrawerAdapter=new ArrayAdapter<String>( AddressBook.this,android.R.layout.simple_list_item_1, leftSliderData);
         leftDrawerList.setAdapter(navigationDrawerAdapter);
         leftDrawerList.setOnItemClickListener(this);
+        v1 = getLayoutInflater().inflate(R.layout.header, null);
+        tvu = (TextView) v1.findViewById(R.id.headeruser);
+
+        tvm = (TextView) v1.findViewById(R.id.headermail);
+        tvu.setText(session.getUserDetails().getUsername());
+        tvm.setText(session.getUserDetails().getEmail());
+        leftDrawerList.addHeaderView(v1);
+
+
     }
 
     @Override
