@@ -16,4 +16,5 @@
     <color name="ldrawer_color">#FFFFFF</color>
     <color name="divider">#e1e1e1</color>
     <color name="login_button">#01283C</color>
+    <color name="register_background">#FFF3E0</color>
 </resources>

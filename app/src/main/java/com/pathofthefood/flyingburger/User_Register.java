@@ -19,7 +19,6 @@ public class User_Register extends Activity {
 
     EditText user, pass, email, phone, fullname;
     Button registro;
-    ImageView x1, x2, x3, x4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +31,6 @@ public class User_Register extends Activity {
         phone = (EditText) findViewById(R.id.editTextPN);
         fullname = (EditText) findViewById(R.id.editTextFN);
         registro = (Button) findViewById(R.id.buttonRegistro);
-        x1 = (ImageView) findViewById(R.id.imageView4);
-        x2 = (ImageView) findViewById(R.id.imageView5);
-        x3 = (ImageView) findViewById(R.id.imageView6);
-        x4 = (ImageView) findViewById(R.id.imageView7);
-        x1.setVisibility(View.INVISIBLE);
-        x2.setVisibility(View.INVISIBLE);
-        x3.setVisibility(View.INVISIBLE);
-        x4.setVisibility(View.INVISIBLE);
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
