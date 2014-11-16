@@ -91,6 +91,7 @@
                android:noHistory="true">
        </activity>
        <activity
+               android:theme="@style/Theme.AppCompat.Light.NoActionBar"
                android:name="com.pathofthefood.flyingburger.Login"
                android:label="@string/app_name"
                android:noHistory="true">
