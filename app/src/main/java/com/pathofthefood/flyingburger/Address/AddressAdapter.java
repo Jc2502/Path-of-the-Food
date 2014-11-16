@@ -48,11 +48,13 @@ public class AddressAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.address, null);
         }
 
-        TextView CF = (TextView) convertView.findViewById(R.id.TextViewAddresName);
-        TextView min = (TextView) convertView.findViewById(R.id.textViewDescriptionAddres);
-        CF.setText(address_list.get(position).getLabel());
+        TextView TVAN = (TextView) convertView.findViewById(R.id.TextViewAddresName);
+        TextView TVAD = (TextView) convertView.findViewById(R.id.textViewDescriptionAddres);
+        TextView TVTA = (TextView) convertView.findViewById(R.id.textViewTextAddres);
+        TVAN.setText(address_list.get(position).getLabel());
         Log.d("LABEL", address_list.get(position).getLabel());
-        min.setText(address_list.get(position).getTextaddress());
+        TVAD.setText(address_list.get(position).getDescription());
+        TVTA.setText(address_list.get(position).getTextaddress());
         return convertView;
     }
 }

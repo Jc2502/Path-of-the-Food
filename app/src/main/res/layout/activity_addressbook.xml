@@ -9,8 +9,7 @@
                   android:layout_width="match_parent"
                   android:background="#ffffff"
                   android:cacheColorHint="#ffffff"
-                  android:clickable="true"
-                  android:choiceMode="multipleChoice"/>
+                  android:clickable="true"/>
 
         <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/fab"
