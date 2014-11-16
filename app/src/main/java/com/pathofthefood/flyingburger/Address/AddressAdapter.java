@@ -1,7 +1,9 @@
 package com.pathofthefood.flyingburger.Address;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -25,10 +27,12 @@ public class AddressAdapter extends BaseAdapter {
     View convertView;
     private Context context;
     private ArrayList<Address> address_list;
+    private Activity parentActivity;
 
-    public AddressAdapter(Context context, ArrayList<Address> address_list) {
+    public AddressAdapter(Context context, ArrayList<Address> address_list, Activity parentActivity) {
         this.context = context;
         this.address_list = address_list;
+        this.parentActivity = parentActivity;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class AddressAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -69,9 +73,25 @@ public class AddressAdapter extends BaseAdapter {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SessionManager session = new SessionManager(context);
-                new AddressDeleteTask(context, session.getUserDetails().getApi_token(), address_list.get(position).getId(), position).execute();
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
+                alertDialog.setTitle("Estas apunto de Eliminar la siguiente direccion estas Seguro?");
+                alertDialog.setMessage(String.valueOf(address_list.get(position).getLabel()));
+                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                SessionManager session = new SessionManager(context);
+                                new AddressDeleteTask(context, session.getUserDetails().getApi_token(), address_list.get(position).getId(), position).execute();
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
 
+                alertDialog.show();
 
             }
         });
@@ -82,7 +102,6 @@ public class AddressAdapter extends BaseAdapter {
 
         int position;
         private Context context;
-        private ArrayList<Address> address;
         private SessionManager session;
         private String api, id;
 

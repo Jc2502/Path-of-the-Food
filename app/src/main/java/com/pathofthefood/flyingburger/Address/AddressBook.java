@@ -35,7 +35,6 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     private SessionManager session;
     private ArrayAdapter<String> navigationDrawerAdapter;
     private DrawerLayout drawer;
-    private RelativeLayout mDrawerRelativeLayout;
     private ListView leftDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
@@ -68,7 +67,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     }
 
     private void init() {
-        getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
+        //getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
         navigationDrawerAdapter = new ArrayAdapter<String>(AddressBook.this, android.R.layout.simple_list_item_1, leftSliderData);
@@ -88,7 +87,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         drawer.closeDrawers();
-        Toast.makeText(AddressBook.this, leftSliderData[position].toString() + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AddressBook.this,String.valueOf(leftSliderData[position])+ "", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -187,7 +186,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                 case CONFIG.DONE:
                     Log.d("AddressTask", "Entro onPostExecute");
                     addressess = this.address;
-                    adapter = new AddressAdapter(getApplicationContext(), addressess);
+                    adapter = new AddressAdapter(getApplicationContext(), addressess,AddressBook.this);
                     Log.e("ARRAYLIST", String.valueOf(addressess.get(0)));
                     adapter.notifyDataSetChanged();
                     AddressList.setAdapter(adapter);
