@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.CONFIG;
 import com.pathofthefood.flyingburger.HttpClientHelp;
+import com.pathofthefood.flyingburger.NotAuthException;
 import com.pathofthefood.flyingburger.R;
 import com.pathofthefood.flyingburger.SharedPerferencesObjects;
 import com.pathofthefood.flyingburger.utils.SessionManager;
@@ -89,8 +90,10 @@ public class AddressBook extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("Addressbook", "Error cargando direciones");
-            } catch (Exception e) {
-                Log.e("Addressbook", "Error inesperado");
+            } catch (NotAuthException e) {
+                e.printStackTrace();
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
             return null;
         }

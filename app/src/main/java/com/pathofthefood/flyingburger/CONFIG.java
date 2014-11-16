@@ -5,6 +5,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.apache.http.HttpResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CONFIG {
     public static final String SERVER_URL = "http://pof.marinsalinas.com/api/v1/";
     public static final String LOGIN = "login";
@@ -36,6 +40,20 @@ public class CONFIG {
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+
+    public static void isAuth(HttpResponse response, JSONObject jsonObj) throws JSONException, NotAuthException{
+        //Si el Status Code es diferente de 200 mandamos el error
+        if (response.getStatusLine().getStatusCode() != 200) {
+            if (jsonObj.getBoolean("error")) {
+                String errorMsj = jsonObj.getString("message");
+                if (errorMsj.equals("No Autenticado")) {
+                    throw new NotAuthException(errorMsj, true);
+                }
+            }
+
+        }
     }
 
 }

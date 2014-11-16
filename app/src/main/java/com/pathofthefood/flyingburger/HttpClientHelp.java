@@ -490,7 +490,7 @@ public class HttpClientHelp {
 
     //Obtener Direcciones
     public ArrayList<Address> show_addressbook(String URL, String api)
-            throws JSONException {
+            throws JSONException, NotAuthException {
         BufferedReader bufferedReader = null;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet request = new HttpGet(URL + CONFIG.ADDRESS);
@@ -507,6 +507,10 @@ public class HttpClientHelp {
             }
             bufferedReader.close();
             JSONObject jsonObj = new JSONObject(stringBuffer.toString());
+
+            //IS AUTH
+            CONFIG.isAuth(response, jsonObj);
+
             Log.e("Addresses", jsonObj.toString());
             ArrayList<Address> addressbook = new ArrayList<Address>();
             JSONArray jsonArray = jsonObj.getJSONArray("addressbook");
