@@ -14,5 +14,6 @@
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="check_internet">Please check the internet connection and try again</string>
     <string name="error_field_required">This field is required</string>
+    <string name="logo_description">Application Logo</string>
 
 </resources>
