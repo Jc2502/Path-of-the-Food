@@ -15,5 +15,7 @@
     <string name="check_internet">Please check the internet connection and try again</string>
     <string name="error_field_required">This field is required</string>
     <string name="logo_description">Application Logo</string>
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
 
 </resources>
