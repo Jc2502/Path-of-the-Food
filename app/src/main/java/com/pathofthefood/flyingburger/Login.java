@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
+import com.pathofthefood.flyingburger.Address.AddressBook;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -170,7 +171,7 @@ public class Login extends Activity {
             if (!result) {
                 login = true;
                 Toast.makeText(this.context, "Loggeo Exitosamente!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Home.class).putExtras(id));
+                startActivity(new Intent(getApplicationContext(), AddressBook.class));
                 finish();
 
             } else {
