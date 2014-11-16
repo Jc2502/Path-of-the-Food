@@ -15,4 +15,5 @@
     <color name="login_orange">#FF9800</color>
     <color name="ldrawer_color">#FFFFFF</color>
     <color name="divider">#e1e1e1</color>
+    <color name="login_button">#01283C</color>
 </resources>
