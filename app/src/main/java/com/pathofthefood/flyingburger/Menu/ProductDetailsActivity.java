@@ -1,10 +1,11 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Menu;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import com.pathofthefood.flyingburger.R;
 
 import java.util.List;
 

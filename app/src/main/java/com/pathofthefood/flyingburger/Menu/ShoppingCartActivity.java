@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Menu;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.melnykov.fab.FloatingActionButton;
+import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.Address.Address;
 import com.pathofthefood.flyingburger.Address.AddressBook;
 import com.pathofthefood.flyingburger.utils.SessionManager;

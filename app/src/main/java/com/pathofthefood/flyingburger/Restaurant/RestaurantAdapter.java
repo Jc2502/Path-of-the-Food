@@ -73,7 +73,8 @@ public class RestaurantAdapter extends BaseAdapter {
         holder.TVAD.setText(address_list.get(position).getDescription());
         holder.TVTA.setText(address_list.get(position).getTextaddress());
         ImageView image = holder.RLOGO;
-        imageLoader.DisplayImage(data[position],image);
+        String image_url = "http://pof.marinsalinas.com/uploads/"+address_list.get(position).getImage_url();
+        imageLoader.DisplayImage(image_url,image);
 
         //RLOGO.setImageDrawable(drawable);
         return vi;

@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Menu;
 
 public class ShoppingCartEntry {
 

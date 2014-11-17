@@ -171,7 +171,7 @@ public class Login extends Activity {
             if (!result) {
                 login = true;
                 Toast.makeText(this.context, "Loggeo Exitosamente!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), AddressBook.class));
+                startActivity(new Intent(getApplicationContext(), AddressBook.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 finish();
 
             } else {

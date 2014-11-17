@@ -7,30 +7,35 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_height="@dimen/abc_action_bar_default_height_material"
-            android:background="@drawable/materialbg">
+            android:background="@drawable/materialbg" android:weightSum="1">
 
 
         <ImageView
                 android:id="@+id/profile_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/ic_launcher"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_launcher"
                 android:layout_margin="5dp"
                 android:gravity="center_vertical"/>
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:layout_marginLeft="@dimen/abc_text_size_subtitle_material_toolbar"
-                      android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <TextView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/headeruser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hola"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/abc_text_size_title_material_toolbar"
+                    android:textSize="16dp"
                     />
             <TextView
                     android:id="@+id/headermail"
@@ -38,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="Hola"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
+                    android:textSize="12dp"
                     />
         </LinearLayout>
 

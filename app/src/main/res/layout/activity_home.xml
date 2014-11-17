@@ -37,22 +37,6 @@
                 android:layout_margin="5dip"
                 android:text="Carrito"/>
 
-        <Button
-                android:id="@+id/buttonlogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Logout"/>
-
-        <Button
-                android:id="@+id/buttonedit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EditInfo"/>
-        <Button
-                android:id="@+id/buttondelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DeleteUSr"/>
     </LinearLayout>
 
 </LinearLayout>

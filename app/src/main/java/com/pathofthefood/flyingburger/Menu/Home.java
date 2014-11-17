@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.Menu;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,16 +11,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.pathofthefood.flyingburger.*;
+import com.pathofthefood.flyingburger.Menu.*;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class Home extends Activity {
-    Button LogOut, EditInfo, Delete;
 
     private List<Product> mProductList;
 
@@ -31,9 +31,6 @@ public class Home extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mProductList = ShoppingCartHelper.getCatalog(getResources());
-        LogOut = (Button) findViewById(R.id.buttonlogout);
-        EditInfo = (Button) findViewById(R.id.buttonedit);
-        Delete = (Button) findViewById(R.id.buttondelete);
         session = new SessionManager(getApplicationContext());
 
         ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
@@ -61,52 +58,14 @@ public class Home extends Activity {
             }
         });
 
-        LogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    logout(session.getUserDetails().getApi_token());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                }
 
 
-            }
-        });
 
-        EditInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if(!CONFIG.isOnline(getApplicationContext())){
-                    Toast.makeText(getApplicationContext(), R.string.check_internet,Toast.LENGTH_LONG).show();
-                    return;
-                }
-                try {
-                    user_info();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        Delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    delete_user(session.getUserDetails().getApi_token(), session.getUserDetails().getId());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
     }
 
-    public void logout(String token) throws JSONException {
+    /*public void logout(String token) throws JSONException {
         new LogOutTask(getApplicationContext(), token, LogOut).execute();
     }
 
@@ -117,7 +76,7 @@ public class Home extends Activity {
     public void delete_user(String token, String api) throws JSONException {
         new DeleteUserTask(getApplicationContext(), token, api, Delete).execute();
     }
-
+*/
     class LogOutTask extends AsyncTask<String, Void, Boolean> {
 
         String value;
@@ -254,7 +213,7 @@ public class Home extends Activity {
 
         private Context context;
         private Button editButton;
-        private User  user;
+        private User user;
         private String message;
         private Bundle informacion;
         private SessionManager session;

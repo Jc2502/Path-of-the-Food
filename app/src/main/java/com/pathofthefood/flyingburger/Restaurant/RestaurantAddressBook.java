@@ -17,6 +17,8 @@ import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.Address.Address;
 import com.pathofthefood.flyingburger.Address.NewAddress;
 import com.pathofthefood.flyingburger.*;
+import com.pathofthefood.flyingburger.Menu.Home;
+import com.pathofthefood.flyingburger.Menu.ShoppingCartActivity;
 import com.pathofthefood.flyingburger.ldrawer_library.ActionBarDrawerToggle;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
 import com.pathofthefood.flyingburger.utils.SessionManager;
@@ -56,41 +58,21 @@ public class RestaurantAddressBook extends Activity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurantaddressbook);
         session = new SessionManager(getApplicationContext());
-        init();
-
-        initDrawer();
-
-
         AddressList = (ListView) findViewById(R.id.ListViewAddress);
         new AddressTask(getApplicationContext(), addressess, session.getUserDetails().getApi_token()).execute();
-    }
+        AddressList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
 
-    private void init() {
-        //getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
-        navigationDrawerAdapter = new ArrayAdapter<String>(RestaurantAddressBook.this, android.R.layout.simple_list_item_1, leftSliderData);
-        leftDrawerList.setAdapter(navigationDrawerAdapter);
-        leftDrawerList.setOnItemClickListener(this);
-        v1 = getLayoutInflater().inflate(R.layout.header, null);
-        tvu = (TextView) v1.findViewById(R.id.headeruser);
+                String item = (addressess.get(position).getId()).toString();
 
-        tvm = (TextView) v1.findViewById(R.id.headermail);
-        tvu.setText(session.getUserDetails().getUsername());
-        tvm.setText(session.getUserDetails().getEmail());
-        leftDrawerList.addHeaderView(v1);
+                startActivity(new Intent(getApplicationContext(), Home.class));
 
 
-    }
+            }
+        });
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        drawer.closeDrawers();
-        Toast.makeText(RestaurantAddressBook.this,String.valueOf(leftSliderData[position])+ "", Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void initDrawer() {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         drawerArrow = new DrawerArrowDrawable(this) {
@@ -100,18 +82,13 @@ public class RestaurantAddressBook extends Activity implements AdapterView.OnIte
             }
         };
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawer, drawerArrow, R.string.drawer_open, R.string.drawer_close) {
+    }
 
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-            }
 
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        drawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        drawer.closeDrawers();
+        Toast.makeText(RestaurantAddressBook.this,String.valueOf(leftSliderData[position])+ "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -123,16 +100,10 @@ public class RestaurantAddressBook extends Activity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawerToggle.onOptionsItemSelected(item);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
     }
 
 
@@ -150,7 +121,8 @@ public class RestaurantAddressBook extends Activity implements AdapterView.OnIte
             adapter.imageLoader.clearCache();
             adapter.notifyDataSetChanged();
         }
-    };
+};
+
 
     public void onItemClick(int mPosition)
     {

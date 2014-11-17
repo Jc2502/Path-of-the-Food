@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -23,6 +25,7 @@ import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddressBook extends Activity implements AdapterView.OnItemClickListener {
 
@@ -33,18 +36,28 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     private ArrayList<Address> addressess;
     private AddressAdapter adapter;
     private SessionManager session;
-    private ArrayAdapter<String> navigationDrawerAdapter;
+    private DrawerAdapter navigationDrawerAdapter;
     private DrawerLayout drawer;
     private ListView leftDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
-    private String[] leftSliderData = {"Home", "Android", "Tech Zone", "Sitemap", "About", "Contact Me"};
-
+    private ArrayList<DrawerItem> menu_drawer;
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        navMenuTitles = getResources().getStringArray(R.array.drawer_text);
+        menu_drawer = new ArrayList<DrawerItem>();
+        // nav drawer icons from resources
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.drawer_items);
+        //= new ArrayList<String>(Arrays.asList("Perfil","Pedidos","Historial","Ajustes")
         setContentView(R.layout.activity_addressbook);
+        menu_drawer.add(new DrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0,0)));
+        menu_drawer.add(new DrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1,0)));
+        menu_drawer.add(new DrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,0)));
         session = new SessionManager(getApplicationContext());
         init();
         initDrawer();
@@ -58,7 +71,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                 startActivity(new Intent(getApplicationContext(), NewAddress.class));
             }
         });
-        new AddressTask(getApplicationContext(), addressess, session.getUserDetails().getApi_token()).execute();
+       new AddressTask(getApplicationContext(), addressess, session.getUserDetails().getApi_token()).execute();
         //addressess = (ArrayList<Address>) getIntent().getSerializableExtra("addressbook");
     }
 
@@ -66,14 +79,16 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         //getActionBar().setIcon(new ColorDrawable(Color.TRANSPARENT));
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
-        navigationDrawerAdapter = new ArrayAdapter<String>(AddressBook.this, android.R.layout.simple_list_item_1, leftSliderData);
+        Resources res = getResources();
+        int[] images = res.getIntArray(R.array.drawer_items);
+        navigationDrawerAdapter = new DrawerAdapter(AddressBook.this,menu_drawer);
         leftDrawerList.setAdapter(navigationDrawerAdapter);
         leftDrawerList.setOnItemClickListener(this);
         v1 = getLayoutInflater().inflate(R.layout.header, null);
         tvu = (TextView) v1.findViewById(R.id.headeruser);
 
         tvm = (TextView) v1.findViewById(R.id.headermail);
-        tvu.setText(session.getUserDetails().getUsername());
+        tvu.setText(session.getUserDetails().getFullname());
         tvm.setText(session.getUserDetails().getEmail());
         leftDrawerList.addHeaderView(v1);
 
@@ -83,7 +98,10 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         drawer.closeDrawers();
-        Toast.makeText(AddressBook.this,String.valueOf(leftSliderData[position])+ "", Toast.LENGTH_SHORT).show();
+        int value = position-1;
+        if(value != -1) {
+            Toast.makeText(AddressBook.this, "Hola :)", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

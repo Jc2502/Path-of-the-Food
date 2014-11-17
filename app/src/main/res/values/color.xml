@@ -17,4 +17,10 @@
     <color name="divider">#e1e1e1</color>
     <color name="login_button">#01283C</color>
     <color name="register_background">#FFF3E0</color>
+
+    <array name="mycolors">
+        <item>@color/login_orange</item>
+        <item>@color/login_button</item>
+
+    </array>
 </resources>

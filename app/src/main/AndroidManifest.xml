@@ -32,12 +32,12 @@
 
         </activity>
         <activity
-                android:name="com.pathofthefood.flyingburger.Home"
+                android:name=".Menu.Home"
                 android:label="@string/title_activity_home">
         </activity>
-        <activity android:name="com.pathofthefood.flyingburger.ProductDetailsActivity">
+        <activity android:name=".Menu.ProductDetailsActivity">
         </activity>
-        <activity android:name="com.pathofthefood.flyingburger.ShoppingCartActivity">
+        <activity android:name=".Menu.ShoppingCartActivity">
         </activity>
         <activity
                 android:name="com.pathofthefood.flyingburger.Map"
@@ -82,10 +82,13 @@
                android:name="com.pathofthefood.flyingburger.Address.AddressBook"
                android:label="@string/title_activity_address"
                >
+
+
+
        </activity>
         <activity
                 android:name="com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook"
-                android:label="@string/title_activity_address"
+                android:label="@string/title_activity_restaurants"
                 >
         </activity>
        <activity

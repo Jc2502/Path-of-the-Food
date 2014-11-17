@@ -99,8 +99,7 @@ public class AddressAdapter extends BaseAdapter {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,String.valueOf(position),Toast.LENGTH_SHORT).show();
-                context.startActivity(new Intent(context, RestaurantAddressBook.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(new Intent(context, RestaurantAddressBook.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("address",address_list.get(position).getId()));
             }
         });
 

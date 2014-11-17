@@ -17,6 +17,15 @@ public class Restaurants implements Serializable {
     private String latitude;
     private String longitude;
     private String icon_type;
+    private String image_url;
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
 
     public String getId() {
         return id;

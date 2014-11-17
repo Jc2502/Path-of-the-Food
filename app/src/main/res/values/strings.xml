@@ -12,10 +12,26 @@
     <string name="title_activity_address_details">AddressDetails</string>
     <string name="title_activity_new_address">Add New Address</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_restaurants">Restaurants</string>
     <string name="check_internet">Please check the internet connection and try again</string>
     <string name="error_field_required">This field is required</string>
     <string name="logo_description">Application Logo</string>
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
+
+    <array name="drawer_items">
+        <item>@drawable/ic_action_account_circle</item>
+        <item>@drawable/ic_communication_location_on</item>
+        <item>@drawable/ic_action_schedule</item>
+        <item>@drawable/ic_action_settings</item>
+
+    </array>
+
+    <array name="drawer_text">
+        <item>"Perfil"</item>
+        <item>"Pedidos"</item>
+        <item>"Historial"</item>
+        <item>"Ajustes"</item>
+    </array>
 
 </resources>
