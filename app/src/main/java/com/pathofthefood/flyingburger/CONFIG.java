@@ -26,6 +26,7 @@ public class CONFIG {
     public static final String TXTADDRESS = "textaddress";
     public static final String LAT = "latitude";
     public static final String LON = "longitude";
+    public static final String RESTAURANT = "restaurants";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final int ERROR_JSON = 0;

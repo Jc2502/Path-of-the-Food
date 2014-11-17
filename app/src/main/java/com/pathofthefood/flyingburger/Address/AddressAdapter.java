@@ -10,10 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.*;
 import com.pathofthefood.flyingburger.*;
+import com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +65,7 @@ public class AddressAdapter extends BaseAdapter {
         TextView TVAD = (TextView) convertView.findViewById(R.id.textViewDescriptionAddres);
         TextView TVTA = (TextView) convertView.findViewById(R.id.textViewTextAddres);
         ImageButton delete = (ImageButton) convertView.findViewById(R.id.deleteaddress);
+        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.linearLayoutAdapter);
         TVAN.setText(address_list.get(position).getLabel());
         Log.d("LABEL", address_list.get(position).getLabel());
         TVAD.setText(address_list.get(position).getDescription());
@@ -76,6 +76,7 @@ public class AddressAdapter extends BaseAdapter {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
                 alertDialog.setTitle("Estas apunto de Eliminar la siguiente direccion estas Seguro?");
                 alertDialog.setMessage(String.valueOf(address_list.get(position).getLabel()));
+
                 alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -95,6 +96,14 @@ public class AddressAdapter extends BaseAdapter {
 
             }
         });
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,String.valueOf(position),Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context, RestaurantAddressBook.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
         return convertView;
     }
 

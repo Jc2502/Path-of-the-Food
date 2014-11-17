@@ -83,6 +83,11 @@
                android:label="@string/title_activity_address"
                >
        </activity>
+        <activity
+                android:name="com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook"
+                android:label="@string/title_activity_address"
+                >
+        </activity>
        <activity
                android:name="com.pathofthefood.flyingburger.Address.AddressDetails"
                android:label="@string/title_activity_address_details">

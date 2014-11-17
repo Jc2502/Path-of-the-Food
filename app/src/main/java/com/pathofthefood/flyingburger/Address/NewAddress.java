@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.CONFIG;
 import com.pathofthefood.flyingburger.GPSTracker;
 import com.pathofthefood.flyingburger.HttpClientHelp;
@@ -33,9 +34,9 @@ import java.util.HashMap;
 public class NewAddress extends Activity {
 
     GoogleMap googleMap;
+    FloatingActionButton save;
     EditText mLabel, mDescription, mTextAddress;
     GPSTracker gps;
-    Button save;
     double latitude, longitude;
     private SessionManager session;
 
@@ -47,7 +48,7 @@ public class NewAddress extends Activity {
         mLabel = (EditText) findViewById(R.id.editAddressName);
         mDescription = (EditText) findViewById(R.id.editdescription);
         mTextAddress = (EditText) findViewById(R.id.editTextAddress);
-        save = (Button) findViewById(R.id.buttonSaveAddress);
+        save = (FloatingActionButton) findViewById(R.id.buttonSaveAddress);
         createMapView();
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,11 +133,11 @@ public class NewAddress extends Activity {
         String value;
         private Context context;
         private String api, label, description, address, lat, lon;
-        private Button editButton;
+        private FloatingActionButton editButton;
         private String message;
         private HashMap<String, String> errors;
 
-        public AddAddressTask(Context ctx, String api, String label, String description, String address, String lat, String lon, Button editButton) {
+        public AddAddressTask(Context ctx, String api, String label, String description, String address, String lat, String lon, FloatingActionButton editButton) {
             this.context = ctx;
             this.api = api;
             this.label = label;
@@ -156,6 +157,7 @@ public class NewAddress extends Activity {
             JSONObject jsonObject;
             try {
                 Log.d("LogoutTask", "Entra a doInBack..TRY");
+                Log.e("LONGTUDE", this.lon);
                 jsonObject = HttpClientHelp.add_address(CONFIG.SERVER_URL, this.api, this.label, this.description, this.address, this.lat, this.lon);
                 value = jsonObject.toString();
                 Log.d("EditUserTask", value);
@@ -180,6 +182,15 @@ public class NewAddress extends Activity {
                     if (messages.has("textaddress")) {
                         errors.put("textaddress", messages.getJSONArray("textaddress").getString(0));
                     }
+
+                    if (messages.has("longitude")) {
+                        errors.put("longitude", messages.getJSONArray("longitude").getString(0));
+                    }
+                    if (messages.has("latitude")) {
+                        errors.put("latitude", messages.getJSONArray("latitude").getString(0));
+                    }
+
+
                     return true;
                 } else if (jsonObject.getBoolean("error") && jsonObject.has("message")) {
                     Log.e("EditUserTask", "Error true, messages");
@@ -205,7 +216,7 @@ public class NewAddress extends Activity {
             Log.d("LogoutTask", "Entra a onPostExecute..");
             this.editButton.setEnabled(true);
             //Si no hay error
-            if (!error && this.errors == null) {
+            if ((!error && this.errors == null) || (!error && this.errors.size() == 0)) {
                 Toast.makeText(this.context, "Usuario Editado!", Toast.LENGTH_SHORT).show();
                 onBackPressed();
                 finish();
@@ -226,6 +237,7 @@ public class NewAddress extends Activity {
                     mTextAddress.setError(this.errors.get("textaddress"));
                     focusView = mTextAddress;
                 }
+                Log.e("ERRORES", String.valueOf(this.errors));
                 focusView.requestFocus();
             } else {
                 Toast.makeText(this.context, this.message, Toast.LENGTH_LONG).show();
