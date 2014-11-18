@@ -100,7 +100,18 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         drawer.closeDrawers();
         int value = position-1;
         if(value != -1) {
-            Toast.makeText(AddressBook.this, "Hola :)", Toast.LENGTH_SHORT).show();
+            switch (position){
+                case 1:
+                    startActivity(new Intent(getApplicationContext(),Information.class));
+                    break;
+                case 2:
+                    Toast.makeText(AddressBook.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(AddressBook.this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+
         }
     }
 

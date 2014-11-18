@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.melnykov.fab.FloatingActionButton;
-import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.Address.Address;
 import com.pathofthefood.flyingburger.Address.AddressBook;
+import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 
@@ -24,10 +24,10 @@ import java.util.List;
 
 public class ShoppingCartActivity extends Activity {
 
-    Button  address;
+    Button address;
     FloatingActionButton checkout;
     private ArrayList<Address> addresses;
-    private List<Product> mCartList;
+    private List<Products> mCartList;
     private ProductAdapter mProductAdapter;
     private SessionManager session;
 
@@ -49,7 +49,7 @@ public class ShoppingCartActivity extends Activity {
 
         // Create the list
         final ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
-        mProductAdapter = new ProductAdapter(mCartList, getLayoutInflater(), true);
+        mProductAdapter = new ProductAdapter(mCartList, getApplicationContext(), true);
         listViewCatalog.setAdapter(mProductAdapter);
 
         listViewCatalog.setOnItemClickListener(new OnItemClickListener() {
@@ -57,9 +57,7 @@ public class ShoppingCartActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Intent productDetailsIntent = new Intent(getBaseContext(), ProductDetailsActivity.class);
-                productDetailsIntent.putExtra(ShoppingCartHelper.PRODUCT_INDEX, position);
-                startActivity(productDetailsIntent);
+
             }
         });
 

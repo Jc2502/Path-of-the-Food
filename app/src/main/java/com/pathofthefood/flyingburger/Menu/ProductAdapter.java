@@ -1,25 +1,31 @@
 package com.pathofthefood.flyingburger.Menu;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.pathofthefood.flyingburger.ImageLoader.ImageLoader;
 import com.pathofthefood.flyingburger.R;
 
 import java.util.List;
 
 public class ProductAdapter extends BaseAdapter {
 
-    private List<Product> mProductList;
-    private LayoutInflater mInflater;
+    private List<Products> mProductList;
+    private static LayoutInflater inflater = null;
     private boolean mShowQuantity;
+    public ImageLoader imageLoader;
+    Context context;
 
-    public ProductAdapter(List<Product> list, LayoutInflater inflater, boolean showQuantity) {
+    public ProductAdapter(List<Products> list, Context context, boolean showQuantity) {
+        this.context = context;
         mProductList = list;
-        mInflater = inflater;
         mShowQuantity = showQuantity;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        imageLoader = new ImageLoader(context.getApplicationContext());
     }
 
     @Override
@@ -38,42 +44,42 @@ public class ProductAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final ViewItem item;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item, null);
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        ViewItem item;
+        View vi = convertView;
+        if (vi == null) {
+            vi = inflater.inflate(R.layout.item, null);
             item = new ViewItem();
 
-            item.productImageView = (ImageView) convertView
+            item.productImageView = (ImageView) vi
                     .findViewById(R.id.ImageViewItem);
 
-            item.productTitle = (TextView) convertView
+            item.productTitle = (TextView) vi
                     .findViewById(R.id.TextViewItem);
 
-            item.productQuantity = (TextView) convertView
+            item.productQuantity = (TextView) vi
                     .findViewById(R.id.textViewQuantity);
 
-            convertView.setTag(item);
+            vi.setTag(item);
         } else {
-            item = (ViewItem) convertView.getTag();
+            item = (ViewItem) vi.getTag();
         }
 
-        Product curProduct = mProductList.get(position);
-
-        item.productImageView.setImageDrawable(curProduct.productImage);
-        item.productTitle.setText(curProduct.title);
+        ImageView image = item.productImageView;
+        String image_url = "http://pof.marinsalinas.com/uploads/" + mProductList.get(position).getImage_url();
+        imageLoader.DisplayImage(image_url, image);
+        item.productTitle.setText(mProductList.get(position).getProduct());
 
         // Show the quantity in the cart or not
         if (mShowQuantity) {
             item.productQuantity.setText("Quantity: "
-                    + ShoppingCartHelper.getProductQuantity(curProduct));
+                    + ShoppingCartHelper.getProductQuantity(mProductList.get(position)));
         } else {
             // Hid the view
             item.productQuantity.setVisibility(View.GONE);
         }
 
-        return convertView;
+        return vi;
     }
 
     private class ViewItem {

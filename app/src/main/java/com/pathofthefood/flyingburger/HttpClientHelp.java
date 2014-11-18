@@ -4,6 +4,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pathofthefood.flyingburger.Address.Address;
+import com.pathofthefood.flyingburger.Menu.Products;
 import com.pathofthefood.flyingburger.Restaurant.Restaurants;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -685,6 +686,59 @@ public class HttpClientHelp {
             }
             Log.e("SIZE ADRESSBOOK", String.valueOf(restaddressbook.size()));
             return restaddressbook;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Products> show_menu(String URL, String api,String id)
+            throws JSONException, NotAuthException {
+        BufferedReader bufferedReader = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet request = new HttpGet(URL + CONFIG.RESTAURANT+"/"+id);
+        Log.d("ID RESTAURANT",id);
+        request.setHeader(CONFIG.API_HEADER, api);
+        Log.e("HEADER-->", api);
+        try {
+            HttpResponse response = httpClient.execute(request);
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
+
+            //IS AUTH
+            CONFIG.isAuth(response, jsonObj);
+
+            Log.e("Addresses", jsonObj.toString());
+            ArrayList<Products> restMenu = new ArrayList<Products>();
+            JSONArray jsonArray = jsonObj.getJSONObject("restaurant").getJSONArray("menu");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+                restMenu.add(gson.fromJson(jsonArray.getJSONObject(i).toString(), Products.class));
+                //Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+            }
+            Log.e("SIZE ADRESSBOOK", String.valueOf(restMenu.size()));
+            return restMenu;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
 

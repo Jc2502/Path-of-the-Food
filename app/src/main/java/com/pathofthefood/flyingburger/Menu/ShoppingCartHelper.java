@@ -1,38 +1,16 @@
 package com.pathofthefood.flyingburger.Menu;
 
-import android.content.res.Resources;
-import com.pathofthefood.flyingburger.R;
-
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class ShoppingCartHelper {
 
     public static final String PRODUCT_INDEX = "PRODUCT_INDEX";
 
-    private static List<Product> catalog;
-    private static Map<Product, ShoppingCartEntry> cartMap = new HashMap<Product, ShoppingCartEntry>();
+    private static Map<Products, ShoppingCartEntry> cartMap = new HashMap<Products, ShoppingCartEntry>();
 
-    public static List<Product> getCatalog(Resources res) {
-        if (catalog == null) {
-            catalog = new Vector<Product>();
-            catalog.add(new Product("Hamburguesa", res
-                    .getDrawable(R.drawable.ham),
-                    "UNA MUY DELICIOSA HAMBURGUESA Y BARATA", 29.99));
-            catalog.add(new Product("TACOS", res
-                    .getDrawable(R.drawable.tac),
-                    "Deliciosa Orden de TACOS LOCOS", 24.99));
-            catalog.add(new Product("Chimichangas", res
-                    .getDrawable(R.drawable.chimi),
-                    "Muy Buenas y sabrozas", 14.99));
-        }
-
-        return catalog;
-    }
-
-    public static void setQuantity(Product product, int quantity) {
+    public static void setQuantity(Products product, int quantity) {
         // Get the current cart entry
         ShoppingCartEntry curEntry = cartMap.get(product);
 
@@ -54,7 +32,7 @@ public class ShoppingCartHelper {
         curEntry.setQuantity(quantity);
     }
 
-    public static int getProductQuantity(Product product) {
+    public static int getProductQuantity(Products product) {
         // Get the current cart entry
         ShoppingCartEntry curEntry = cartMap.get(product);
 
@@ -64,16 +42,15 @@ public class ShoppingCartHelper {
         return 0;
     }
 
-    public static void removeProduct(Product product) {
+    public static void removeProduct(Products product) {
         cartMap.remove(product);
     }
 
-    public static List<Product> getCartList() {
-        List<Product> cartList = new Vector<Product>(cartMap.keySet().size());
-        for (Product p : cartMap.keySet()) {
+    public static ArrayList<Products> getCartList() {
+        ArrayList<Products> cartList = new ArrayList<Products>(cartMap.keySet().size());
+        for (Products p : cartMap.keySet()) {
             cartList.add(p);
         }
-
         return cartList;
     }
 

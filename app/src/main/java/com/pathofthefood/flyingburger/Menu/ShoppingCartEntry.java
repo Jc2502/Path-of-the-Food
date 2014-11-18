@@ -2,15 +2,15 @@ package com.pathofthefood.flyingburger.Menu;
 
 public class ShoppingCartEntry {
 
-    private Product mProduct;
+    private Products mProduct;
     private int mQuantity;
 
-    public ShoppingCartEntry(Product product, int quantity) {
+    public ShoppingCartEntry(Products product, int quantity) {
         mProduct = product;
         mQuantity = quantity;
     }
 
-    public Product getProduct() {
+    public Products getProduct() {
         return mProduct;
     }
 

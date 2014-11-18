@@ -1,51 +1,45 @@
 package com.pathofthefood.flyingburger.Menu;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.pathofthefood.flyingburger.*;
-import com.pathofthefood.flyingburger.Menu.*;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
-public class Home extends Activity {
+public class Menu extends Activity {
 
-    private List<Product> mProductList;
-
+    private static ArrayList<Products> mProductList;
+    private ProductAdapter mProductAdapter;
     private SessionManager session;
+    ListView listViewCatalog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mProductList = ShoppingCartHelper.getCatalog(getResources());
+        setContentView(R.layout.activity_menu);
         session = new SessionManager(getApplicationContext());
+        Intent intent = getIntent();
+        String address = intent.getStringExtra("address");
+        String restaurant = intent.getStringExtra("restaurant");
+        Log.d("RESTAURANT", restaurant);
+        listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
 
-        ListView listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
-        listViewCatalog.setAdapter(new ProductAdapter(mProductList, getLayoutInflater(), false));
-
-        listViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent productDetailsIntent = new Intent(getBaseContext(), ProductDetailsActivity.class);
-                productDetailsIntent.putExtra(ShoppingCartHelper.PRODUCT_INDEX, position);
-                startActivity(productDetailsIntent);
-            }
-        });
+        new MenuTask(getApplicationContext(), mProductList, session.getUserDetails().getApi_token(), restaurant).execute();
 
         Button viewShoppingCart = (Button) findViewById(R.id.ButtonViewCart);
         viewShoppingCart.setOnClickListener(new View.OnClickListener() {
@@ -57,26 +51,85 @@ public class Home extends Activity {
                 startActivity(viewShoppingCartIntent);
             }
         });
-
-
-
-
-
-
     }
 
-    /*public void logout(String token) throws JSONException {
-        new LogOutTask(getApplicationContext(), token, LogOut).execute();
+    public static ArrayList<Products> getCatalog(Resources res) {
+        return mProductList;
     }
 
-    public void user_info() throws JSONException {
-        new UserInfoTask(getApplicationContext(), EditInfo).execute();
+    class MenuTask extends AsyncTask<String, Void, Integer> {
+
+        private Context context;
+        private ArrayList<Products> address;
+        private String api, id;
+
+        public MenuTask(Context context, ArrayList<Products> address, String api, String id) {
+            this.context = context;
+            this.address = address;
+            this.api = api;
+            this.id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+                if (session.isLoggedIn() && CONFIG.isOnline(this.context)) {
+                    HttpClientHelp clienteHttp = new HttpClientHelp();
+                    this.address = clienteHttp.show_menu(CONFIG.SERVER_URL, api, id);
+                    if (this.address == null || this.address.size() == 0) {
+                        return CONFIG.ERROR_NULL;
+                    }
+                    return CONFIG.DONE;
+                } else if (session.isLoggedIn() && !CONFIG.isOnline(this.context)) {
+                    return CONFIG.DONE;
+                }
+                return CONFIG.ERROR_NOT_AUTH;
+            } catch (JSONException e) {
+                return CONFIG.ERROR_JSON;
+            } catch (NotAuthException e) {
+                return CONFIG.ERROR_NOT_AUTH;
+            } catch (Exception ex) {
+                return CONFIG.ERROR_JSON;
+
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+            switch (result) {
+                case CONFIG.DONE:
+                    Log.d("AddressTask", "Entro onPostExecute");
+                    mProductList = this.address;
+                    mProductAdapter = new ProductAdapter(mProductList, context, true);
+                    Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
+                    mProductAdapter.notifyDataSetChanged();
+                    Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
+                    listViewCatalog.setAdapter(mProductAdapter);
+                    Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
+                    break;
+                case CONFIG.ERROR_NOT_AUTH:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    break;
+                case CONFIG.ERROR_NULL:
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Menu.this);
+                    alertDialog.setTitle("Alertas");
+                    alertDialog.setMessage("No Direcciones registradas");
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                    break;
+                default:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    break;
+            }
+        }
     }
 
-    public void delete_user(String token, String api) throws JSONException {
-        new DeleteUserTask(getApplicationContext(), token, api, Delete).execute();
-    }
-*/
+
     class LogOutTask extends AsyncTask<String, Void, Boolean> {
 
         String value;
@@ -207,85 +260,4 @@ public class Home extends Activity {
         }
 
     }
-
-    class UserInfoTask extends AsyncTask<String, Void, Integer> {
-
-
-        private Context context;
-        private Button editButton;
-        private User user;
-        private String message;
-        private Bundle informacion;
-        private SessionManager session;
-
-        public UserInfoTask(Context ctx, Button editButton) {
-            this.context = ctx;
-            this.editButton = editButton;
-            this.editButton.setEnabled(false);
-            session = new SessionManager(getApplicationContext());
-
-        }
-
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            Log.d("UserInfoTask", "Entra a doInBack..");
-
-
-                Log.d("UserInfoTask", "Entra a doInBack..TRY");
-                HttpClientHelp client = new HttpClientHelp();
-
-                if (session.isLoggedIn() && CONFIG.isOnline(getApplicationContext())) {
-                    //Obtenemos info del usuario
-                    HttpClientHelp httpClientHelp = new HttpClientHelp();
-                    try {
-                        this.user = httpClientHelp.user_info(CONFIG.SERVER_URL, session.getUserDetails().getApi_token());
-                        if (this.user == null) {
-                            this.message = "NO EXISTE";
-                            Log.d("EditTask", "ErrorEdit");
-                            //Nulll
-                            return CONFIG.ERROR_NULL;
-                        } else {
-                            informacion = new Bundle();
-                            informacion.putSerializable("users", this.user);
-
-                            return CONFIG.DONE;
-                        }
-                    } catch (JSONException e) {
-                        return CONFIG.ERROR_JSON;
-                    } catch (NotAuthException e) {
-                        return CONFIG.ERROR_NOT_AUTH;
-                    }
-                } else if (session.isLoggedIn() && !CONFIG.isOnline(getApplicationContext())) {
-                    return CONFIG.DONE;
-                }
-                return CONFIG.ERROR_NOT_AUTH;
-            }
-
-
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            Log.d("EditInfo", "Entra a onPostExecute..");
-            this.editButton.setEnabled(true);
-            switch (result) {
-                case CONFIG.DONE:
-                    Intent edituser = new Intent(this.context, Information.class);
-                    edituser.putExtras(informacion);
-                    startActivity(edituser);
-                    break;
-                case CONFIG.ERROR_NOT_AUTH:
-                    startActivity(new Intent(getApplicationContext(), Login.class));
-                    finish();
-                    break;
-                default:
-                    startActivity(new Intent(getApplicationContext(), Login.class));
-                    finish();
-                    break;
-            }
-        }
-
-    }
-
-
 }

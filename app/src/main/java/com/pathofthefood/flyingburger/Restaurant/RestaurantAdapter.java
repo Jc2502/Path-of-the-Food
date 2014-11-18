@@ -26,9 +26,8 @@ public class RestaurantAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Restaurants> address_list;
 
-    public RestaurantAdapter(Context context, ArrayList<Restaurants> address_list,String[] d) {
+    public RestaurantAdapter(Context context, ArrayList<Restaurants> address_list) {
         this.context = context;
-        data = d;
         this.address_list = address_list;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(context.getApplicationContext());
@@ -37,10 +36,6 @@ public class RestaurantAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return this.address_list.size();
-    }
-
-    public RestaurantAdapter getInstance() {
-        return this;
     }
 
     @Override
