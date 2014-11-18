@@ -27,7 +27,7 @@ public class ShoppingCartActivity extends Activity {
     Button address;
     FloatingActionButton checkout;
     private ArrayList<Address> addresses;
-    private List<Products> mCartList;
+    private static List<Products> mCartList;
     private ProductAdapter mProductAdapter;
     private SessionManager session;
 
@@ -37,7 +37,6 @@ public class ShoppingCartActivity extends Activity {
         setContentView(R.layout.shoppingcart);
         session = new SessionManager(getApplicationContext());
         checkout = (FloatingActionButton) findViewById(R.id.fab_shop);
-        address = (Button) findViewById(R.id.buttonAddress);
 
 
         mCartList = ShoppingCartHelper.getCartList();
@@ -64,26 +63,21 @@ public class ShoppingCartActivity extends Activity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "PEDIDO LISTO", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(getApplicationContext(), Map.class));
+                double Valor = 0.0;
+                String ids = "";
+                for(int i=0; i< mCartList.size();i++){
+                  Valor = mCartList.get(i).getPrice()+Valor;
+                  ids = mCartList.get(i).getId()+","+ids;
+                }
+                Toast.makeText(getApplicationContext(), String.valueOf(Valor)+"\n"+ids, Toast.LENGTH_LONG).show();
+                //startActivity(new Intent(getApplicationContext(), Map.class));
             }
         });
 
-        address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //direcciones(session.getUserDetails().getApi_token());
-                startActivity(new Intent(getApplicationContext(), AddressBook.class));
-
-            }
-        });
 
     }
-
-    public void direcciones(String api) {
-        new AddressTask(getApplicationContext(), this.addresses, api).execute();
+    public static void remove(){
+        mCartList = null;
     }
 
     @Override
@@ -96,57 +90,12 @@ public class ShoppingCartActivity extends Activity {
         }
     }
 
-    class AddressTask extends AsyncTask<String, Void, Boolean> {
-
-        private Context context;
-        private ArrayList<Address> address;
-        private String message;
-        private String api;
-        private Bundle addressbook;
-
-        public AddressTask(Context context, ArrayList<Address> address, String api) {
-            this.context = context;
-            this.address = address;
-            this.api = api;
-
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-
-            try {
-                HttpClientHelp clienteHttp = new HttpClientHelp();
-                this.address = clienteHttp.show_addressbook(CONFIG.SERVER_URL, api);
-                if (this.address.size() != 0) {
-                    Log.d("Address--->>>", String.valueOf(this.address.get(0)));
-                    if (this.address == null) {
-                        this.message = "No existen Direcciones en tu libreta de direcciones";
-                    } else {
-                        addressbook = new Bundle();
-                        addressbook.putSerializable("addressbook", this.address);
-                        SharedPerferencesObjects<Address> shaEx = new SharedPerferencesObjects<Address>(this.context);
-                        for (Address addresses : address) {
-                            //shaEx.saveData(Address.class.getName() + "_" + addresses.getId(), addresses);
-                            Log.d("Address", Address.class.getName() + "_" + addresses.getId());
-                        }
-
-                    }
-                } else {
-                    Log.e("Addressbook", "No Tiene Nada");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("Addressbook", "Error cargando direciones");
-            } catch (Exception e) {
-                Log.e("Addressbook", "Error inesperado");
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            Log.d("AddressTask", "Entro onPostExecute");
-            startActivity(new Intent(this.context, AddressBook.class).putExtras(addressbook));
-        }
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        remove();
+        ShoppingCartHelper.removeCart();
+        super.onBackPressed();
     }
+
 }

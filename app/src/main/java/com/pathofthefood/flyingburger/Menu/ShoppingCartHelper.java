@@ -2,15 +2,18 @@ package com.pathofthefood.flyingburger.Menu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShoppingCartHelper {
 
     public static final String PRODUCT_INDEX = "PRODUCT_INDEX";
 
+
     private static Map<Products, ShoppingCartEntry> cartMap = new HashMap<Products, ShoppingCartEntry>();
 
-    public static void setQuantity(Products product, int quantity) {
+
+    public static void setQuantity(Products product, int quantity,String product_id) {
         // Get the current cart entry
         ShoppingCartEntry curEntry = cartMap.get(product);
 
@@ -44,6 +47,15 @@ public class ShoppingCartHelper {
 
     public static void removeProduct(Products product) {
         cartMap.remove(product);
+    }
+
+    public static void removeCart(){
+
+        ArrayList<Products> cartList = new ArrayList<Products>(cartMap.keySet().size());
+        ShoppingCartEntry curEntry = cartMap.get(cartList);
+        for (Products p : cartMap.keySet()) {
+            removeProduct(p);
+        }
     }
 
     public static ArrayList<Products> getCartList() {

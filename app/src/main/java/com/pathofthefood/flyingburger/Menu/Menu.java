@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Menu extends Activity {
@@ -27,6 +29,8 @@ public class Menu extends Activity {
     private ProductAdapter mProductAdapter;
     private SessionManager session;
     ListView listViewCatalog;
+    private List<Products> mCartList;
+    FloatingActionButton viewShoppingCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class Menu extends Activity {
 
         new MenuTask(getApplicationContext(), mProductList, session.getUserDetails().getApi_token(), restaurant).execute();
 
-        Button viewShoppingCart = (Button) findViewById(R.id.ButtonViewCart);
+        viewShoppingCart = (FloatingActionButton) findViewById(R.id.ButtonViewCart);
         viewShoppingCart.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -55,6 +59,14 @@ public class Menu extends Activity {
 
     public static ArrayList<Products> getCatalog(Resources res) {
         return mProductList;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        ShoppingCartActivity.remove();
+        ShoppingCartHelper.removeCart();
+        super.onBackPressed();
     }
 
     class MenuTask extends AsyncTask<String, Void, Integer> {
@@ -101,11 +113,12 @@ public class Menu extends Activity {
                 case CONFIG.DONE:
                     Log.d("AddressTask", "Entro onPostExecute");
                     mProductList = this.address;
-                    mProductAdapter = new ProductAdapter(mProductList, context, true);
+                    mProductAdapter = new ProductAdapter(mProductList, context, false);
                     Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
                     mProductAdapter.notifyDataSetChanged();
                     Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
                     listViewCatalog.setAdapter(mProductAdapter);
+                    viewShoppingCart.attachToListView(listViewCatalog);
                     Log.e("ARRAYLIST", String.valueOf(mProductList.get(0)));
                     break;
                 case CONFIG.ERROR_NOT_AUTH:

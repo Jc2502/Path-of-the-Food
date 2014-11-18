@@ -35,8 +35,7 @@
                 android:name=".Menu.Menu"
                 android:label="@string/title_activity_home">
         </activity>
-        <activity android:name=".Menu.ProductDetailsActivity">
-        </activity>
+
         <activity android:name=".Menu.ShoppingCartActivity">
         </activity>
         <activity
