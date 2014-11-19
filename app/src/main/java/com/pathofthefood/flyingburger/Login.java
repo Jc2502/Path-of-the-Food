@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.pathofthefood.flyingburger.Address.AddressBook;
+import com.pathofthefood.flyingburger.User.User;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -3,7 +3,7 @@ package com.pathofthefood.flyingburger.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.pathofthefood.flyingburger.User;
+import com.pathofthefood.flyingburger.User.User;
 
 /**
  * Created by co_mmsalinas on 12/11/2014.

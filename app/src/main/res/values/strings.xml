@@ -24,16 +24,15 @@
         <item>@drawable/ic_action_room</item>
         <item>@drawable/ic_action_schedule</item>
         <item>@drawable/ic_action_settings</item>
-
     </array>
-
     <array name="drawer_text">
         <item>"Perfil"</item>
         <item>"Pedidos"</item>
         <item>"Historial"</item>
         <item>"Ajustes"</item>
     </array>
-    <string-array  name="spinners">
+
+    <string-array name="spinners">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -41,5 +40,7 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+    <string name="title_activity_orders_book">Ordenes</string>
 
 </resources>

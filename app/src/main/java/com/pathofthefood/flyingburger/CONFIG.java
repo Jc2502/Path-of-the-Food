@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import org.apache.http.HttpResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,7 @@ public class CONFIG {
     public static final String TXTADDRESS = "textaddress";
     public static final String LAT = "latitude";
     public static final String LON = "longitude";
+    public static final String ORDER = "orders";
     public static final String RESTAURANT = "restaurants";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -44,7 +46,7 @@ public class CONFIG {
     }
 
 
-    public static void isAuth(HttpResponse response, JSONObject jsonObj) throws JSONException, NotAuthException{
+    public static void isAuth(HttpResponse response, JSONObject jsonObj) throws JSONException, NotAuthException {
         //Si el Status Code es diferente de 200 mandamos el error
         if (response.getStatusLine().getStatusCode() != 200) {
             if (jsonObj.getBoolean("error")) {

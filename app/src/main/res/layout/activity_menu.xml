@@ -6,15 +6,6 @@
               android:background="#ffffff"
               android:orientation="vertical">
 
-    <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dip"
-            android:text="Product Catalog"
-            android:textColor="#000000"
-            android:textSize="24sp"/>
-
     <ListView
             android:id="@+id/ListViewCatalog"
             android:layout_width="match_parent"
@@ -38,4 +29,5 @@
                 fab:fab_colorPressed="@color/primary_pressed"
                 fab:fab_colorRipple="@color/ripple"
                 />
+
 </FrameLayout>

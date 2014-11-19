@@ -17,14 +17,6 @@
               android:cacheColorHint="#ffffff"
               android:clickable="true"
               android:choiceMode="multipleChoice"/>
-    <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_margin="5dip"
-                  android:id="@+id/LinearLayoutCheckout"
-                  android:layout_gravity="end">
-
-    </LinearLayout>
 </LinearLayout>
     <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_shop"

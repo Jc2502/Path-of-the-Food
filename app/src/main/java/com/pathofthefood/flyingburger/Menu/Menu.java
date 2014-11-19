@@ -9,12 +9,16 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.*;
+import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +35,7 @@ public class Menu extends Activity {
     ListView listViewCatalog;
     private List<Products> mCartList;
     FloatingActionButton viewShoppingCart;
+    private DrawerArrowDrawable drawerArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,12 @@ public class Menu extends Activity {
         setContentView(R.layout.activity_menu);
         session = new SessionManager(getApplicationContext());
         Intent intent = getIntent();
-        String address = intent.getStringExtra("address");
+        final String address = intent.getStringExtra("address");
         String restaurant = intent.getStringExtra("restaurant");
+        final double lat1 = Double.valueOf(intent.getDoubleExtra("lat1", 0));
+        final double lon1 = Double.valueOf(intent.getDoubleExtra("lon1", 0));
+        final double lat2 = Double.valueOf(intent.getDoubleExtra("lat2",0));
+        final double lon2 = Double.valueOf(intent.getDoubleExtra("lon2",0));
         Log.d("RESTAURANT", restaurant);
         listViewCatalog = (ListView) findViewById(R.id.ListViewCatalog);
 
@@ -51,11 +60,44 @@ public class Menu extends Activity {
             @Override
             public void onClick(View v) {
 
-                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class);
+                Intent viewShoppingCartIntent = new Intent(getBaseContext(), ShoppingCartActivity.class).putExtra("address",address).putExtra("lat1",lat1).putExtra("lat2",lat2).putExtra("lon1",lon1).putExtra("lon2",lon2);
                 startActivity(viewShoppingCartIntent);
             }
         });
+
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        drawerArrow = new DrawerArrowDrawable(this) {
+            @Override
+            public boolean isLayoutRtl() {
+                return false;
+            }
+        };
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public View.OnClickListener listener=new View.OnClickListener(){
+        @Override
+        public void onClick(View arg0) {
+            //Refresh cache directory downloaded images
+            mProductAdapter.imageLoader.clearCache();
+            mProductAdapter.notifyDataSetChanged();
+        }
+    };
 
     public static ArrayList<Products> getCatalog(Resources res) {
         return mProductList;
@@ -64,7 +106,6 @@ public class Menu extends Activity {
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
-        ShoppingCartActivity.remove();
         ShoppingCartHelper.removeCart();
         super.onBackPressed();
     }
@@ -127,7 +168,7 @@ public class Menu extends Activity {
                 case CONFIG.ERROR_NULL:
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(Menu.this);
                     alertDialog.setTitle("Alertas");
-                    alertDialog.setMessage("No Direcciones registradas");
+                    alertDialog.setMessage("No Menu");
                     alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

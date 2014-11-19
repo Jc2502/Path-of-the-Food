@@ -1,11 +1,15 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.utils;
 
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pathofthefood.flyingburger.Address.Address;
+import com.pathofthefood.flyingburger.CONFIG;
 import com.pathofthefood.flyingburger.Menu.Products;
+import com.pathofthefood.flyingburger.Pedidos.Orders;
 import com.pathofthefood.flyingburger.Restaurant.Restaurants;
+import com.pathofthefood.flyingburger.User.User;
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -758,4 +762,116 @@ public class HttpClientHelp {
         }
         return null;
     }
+
+    public static JSONObject set_orders(String URL, String api, ArrayList<String> id_item, ArrayList<String>quantity_item,String address_id,String restaurant_id) throws JSONException {
+        BufferedReader bufferedReader = null;
+        JSONObject jsonObject;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        Log.e("ERROR", "request");
+        HttpPost request = new HttpPost(URL + CONFIG.ORDER);
+        request.setHeader(CONFIG.API_HEADER, api);
+        Log.e("HEADER-->", api);
+        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+        postParameters.add(new BasicNameValuePair("restaurant_id", restaurant_id));
+        postParameters.add(new BasicNameValuePair("address_id", address_id));
+        for(int i = 0;i< id_item.size();i++){
+            postParameters.add(new BasicNameValuePair("items_q[]", quantity_item.get(i)));
+            postParameters.add(new BasicNameValuePair("items_id[]", id_item.get(i)));
+        }
+
+        try {
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
+                    postParameters);
+            request.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(request);
+
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            jsonObject = new JSONObject(stringBuffer.toString());
+
+            return jsonObject;
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            Log.d("ClientProtocolException", e.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Log.d("Exception", e.toString());
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Orders> show_orders(String URL, String api,int history)
+            throws JSONException, NotAuthException {
+        BufferedReader bufferedReader = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet request = new HttpGet(URL + CONFIG.ORDER+"?history="+history);
+        request.setHeader(CONFIG.API_HEADER, api);
+        Log.e("HEADER-->", api);
+        try {
+            HttpResponse response = httpClient.execute(request);
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            JSONObject jsonObj = new JSONObject(stringBuffer.toString());
+
+            //IS AUTH
+            CONFIG.isAuth(response, jsonObj);
+
+            Log.e("Addresses", jsonObj.toString());
+            ArrayList<Orders> ordersbook = new ArrayList<Orders>();
+            JSONArray jsonArray = jsonObj.getJSONArray("orders");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+                ordersbook.add(gson.fromJson(jsonArray.getJSONObject(i).toString(), Orders.class));
+                //Log.e("JSONOBJ", jsonArray.getJSONObject(i).toString());
+            }
+            Log.e("SIZE ORDERS", String.valueOf(ordersbook.size()));
+            return ordersbook;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
 }

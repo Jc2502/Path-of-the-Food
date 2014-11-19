@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -19,13 +17,15 @@ import android.view.View;
 import android.widget.*;
 import com.melnykov.fab.FloatingActionButton;
 import com.pathofthefood.flyingburger.*;
+import com.pathofthefood.flyingburger.Pedidos.OrdersBook;
 import com.pathofthefood.flyingburger.ldrawer_library.ActionBarDrawerToggle;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddressBook extends Activity implements AdapterView.OnItemClickListener {
 
@@ -106,9 +106,11 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                     break;
                 case 2:
                     Toast.makeText(AddressBook.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),OrdersBook.class).putExtra("history",0));
                     break;
                 case 3:
                     Toast.makeText(AddressBook.this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                    //startActivity(new Intent(getApplicationContext(), OrdersBook.class).putExtra("history", 1));
                     break;
             }
 

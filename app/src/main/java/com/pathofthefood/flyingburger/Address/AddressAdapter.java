@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +101,7 @@ public class AddressAdapter extends BaseAdapter {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, RestaurantAddressBook.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("address",address_list.get(position).getId()));
+                context.startActivity(new Intent(context, RestaurantAddressBook.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("address",address_list.get(position).getId()).putExtra("lat1",address_list.get(position).getLatitude()).putExtra("lon1",address_list.get(position).getLongitude()));
             }
         });
 

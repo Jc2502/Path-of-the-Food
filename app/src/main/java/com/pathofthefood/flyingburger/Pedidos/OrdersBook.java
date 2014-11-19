@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger.Restaurant;
+package com.pathofthefood.flyingburger.Pedidos;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,11 +9,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import com.pathofthefood.flyingburger.*;
-import com.pathofthefood.flyingburger.Menu.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.pathofthefood.flyingburger.CONFIG;
+import com.pathofthefood.flyingburger.Login;
+import com.pathofthefood.flyingburger.R;
+import com.pathofthefood.flyingburger.Restaurant.RestaurantAdapter;
 import com.pathofthefood.flyingburger.ldrawer_library.ActionBarDrawerToggle;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
 import com.pathofthefood.flyingburger.utils.HttpClientHelp;
@@ -23,44 +28,29 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class RestaurantAddressBook extends Activity {
-
-
+public class OrdersBook extends Activity {
     View v1;
     TextView tvu, tvm;
     private ListView AddressList;
-    private ArrayList<Restaurants> addressess;
-    private RestaurantAdapter adapter;
+    private ArrayList<Orders> addressess;
+    private OrdersAdapter adapter;
     private SessionManager session;
     private ArrayAdapter<String> navigationDrawerAdapter;
     private DrawerLayout drawer;
     private ListView leftDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
+    private int history;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurantaddressbook);
+        setContentView(R.layout.activity_orders_book);
         session = new SessionManager(getApplicationContext());
-        AddressList = (ListView) findViewById(R.id.ListViewAddress);
-        new RestaurantTask(getApplicationContext(), addressess, session.getUserDetails().getApi_token()).execute();
-        AddressList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent intent = getIntent();
-                String address = intent.getStringExtra("address");
-                double lat1 = Double.valueOf(intent.getStringExtra("lat1"));
-                double lon1 = Double.valueOf(intent.getStringExtra("lon1"));
-                double lat2 = Double.valueOf(addressess.get(position).getLatitude());
-                double lon2 = Double.valueOf(addressess.get(position).getLongitude());
-                Log.d("RESTAURANT", address);
-                startActivity(new Intent(getApplicationContext(), Menu.class).putExtra("restaurant", addressess.get(position).getId()).putExtra("lat1", lat1).putExtra("lat2", lat2).putExtra("lon1", lon1).putExtra("lon2", lon2).putExtra("address", address));
-
-
-            }
-        });
+        AddressList = (ListView) findViewById(R.id.ListViewOrders);
+        Intent intent = getIntent();
+        history = intent.getIntExtra("history",0);
+        new OrderTask(getApplicationContext(), addressess, session.getUserDetails().getApi_token(),history).execute();
 
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,7 +86,7 @@ public class RestaurantAddressBook extends Activity {
             adapter.imageLoader.clearCache();
             adapter.notifyDataSetChanged();
         }
-};
+    };
 
     @Override
     public void onDestroy()
@@ -105,16 +95,18 @@ public class RestaurantAddressBook extends Activity {
         AddressList.setAdapter(null);
         super.onDestroy();
     }
-    class RestaurantTask extends AsyncTask<String, Void, Integer> {
+    class OrderTask extends AsyncTask<String, Void, Integer> {
 
         private Context context;
-        private ArrayList<Restaurants> address;
+        private ArrayList<Orders> orders;
         private String api;
+        private int history;
 
-        public RestaurantTask(Context context, ArrayList<Restaurants> address, String api) {
+        public OrderTask(Context context, ArrayList<Orders> orders, String api,int history) {
             this.context = context;
-            this.address = address;
+            this.orders = orders;
             this.api = api;
+            this.history = history;
         }
 
         @Override
@@ -122,8 +114,8 @@ public class RestaurantAddressBook extends Activity {
             try {
                 if (session.isLoggedIn() && CONFIG.isOnline(this.context)) {
                     HttpClientHelp clienteHttp = new HttpClientHelp();
-                    this.address = clienteHttp.show_restaurants(CONFIG.SERVER_URL, api);
-                    if (this.address == null || this.address.size() == 0) {
+                    this.orders = clienteHttp.show_orders(CONFIG.SERVER_URL, api,history);
+                    if (this.orders == null || this.orders.size() == 0) {
                         return CONFIG.ERROR_NULL;
                     }
                     return CONFIG.DONE;
@@ -147,8 +139,8 @@ public class RestaurantAddressBook extends Activity {
             switch (result) {
                 case CONFIG.DONE:
                     Log.d("AddressTask", "Entro onPostExecute");
-                    addressess = this.address;
-                    adapter = new RestaurantAdapter(getApplicationContext(), addressess);
+                    addressess = this.orders;
+                    adapter = new OrdersAdapter(getApplicationContext(), addressess);
                     Log.e("ARRAYLIST", String.valueOf(addressess.get(0)));
                     adapter.notifyDataSetChanged();
                     AddressList.setAdapter(adapter);
@@ -158,7 +150,7 @@ public class RestaurantAddressBook extends Activity {
                     startActivity(new Intent(getApplicationContext(), Login.class));
                     break;
                 case CONFIG.ERROR_NULL:
-                   AlertDialog.Builder alertDialog = new AlertDialog.Builder(RestaurantAddressBook.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersBook.this);
                     alertDialog.setTitle("Alertas");
                     alertDialog.setMessage("No Direcciones registradas");
                     alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pathofthefood.flyingburger.Address.AddressBook;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
+import com.pathofthefood.flyingburger.utils.NotAuthException;
 import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 

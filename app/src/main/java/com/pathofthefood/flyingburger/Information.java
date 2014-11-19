@@ -6,10 +6,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.pathofthefood.flyingburger.User.User;
+import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
+import com.pathofthefood.flyingburger.utils.HttpClientHelp;
+import com.pathofthefood.flyingburger.utils.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +26,8 @@ public class Information extends Activity {
     String api, id;
     Button edit, editpass;
     EditText mUserEdit, mEmailEdit, mPhoneEdit, mFullnameEdit, pass1, pass2;
+    SessionManager session;
+    private DrawerArrowDrawable drawerArrow;
 
 
     @Override
@@ -36,16 +43,15 @@ public class Information extends Activity {
         editpass = (Button) findViewById(R.id.buttoneditpass);
         pass1 = (EditText) findViewById(R.id.editpass1);
         pass2 = (EditText) findViewById(R.id.editpass2);
+        session = new SessionManager(getApplicationContext());
 
-        users = (User) getIntent().getSerializableExtra("users");
-        if (users != null) {
-            api = users.getApi_token();
-            id = users.getId();
-            mUserEdit.setText(users.getUsername());
-            mEmailEdit.setText(users.getEmail());
-            mPhoneEdit.setText(users.getPhone());
-            mFullnameEdit.setText(users.getFullname());
-        }
+
+            api = session.getUserDetails().getApi_token();
+            id = session.getUserDetails().getId();
+            mUserEdit.setText(session.getUserDetails().getUsername());
+            mEmailEdit.setText(session.getUserDetails().getEmail());
+            mPhoneEdit.setText(session.getUserDetails().getPhone());
+            mFullnameEdit.setText(session.getUserDetails().getFullname());
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +110,30 @@ public class Information extends Activity {
             }
         });
 
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        drawerArrow = new DrawerArrowDrawable(this) {
+            @Override
+            public boolean isLayoutRtl() {
+                return false;
+            }
+        };
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void edit_user(String token, String id, String user, String email, String phone, String fullname) {
@@ -142,7 +172,7 @@ public class Information extends Activity {
             JSONObject jsonObject;
             try {
                 Log.d("LogoutTask", "Entra a doInBack..TRY");
-                jsonObject = HttpClientHelp.edit_user(CONFIG.SERVER_URL, this.api, this.id, this.user, this.email, this.phone, this.fullname);
+                jsonObject = HttpClientHelp.edit_user(CONFIG.SERVER_URL, session.getUserDetails().getApi_token(), id, user, email, phone, fullname);
                 value = jsonObject.toString();
                 Log.d("EditUserTask", value);
                 if (value == null) {
@@ -185,7 +215,6 @@ public class Information extends Activity {
                 return true;
             }
         }
-
 
         @Override
         protected void onPostExecute(Boolean error) {

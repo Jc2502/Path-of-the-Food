@@ -86,10 +86,15 @@
 
        </activity>
         <activity
-                android:name="com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook"
+                android:name="com.pathofthefood.flyingburger.Pedidos.OrdersBook"
                 android:label="@string/title_activity_restaurants"
                 >
         </activity>
+        <activity
+            android:name="com.pathofthefood.flyingburger.Restaurant.RestaurantAddressBook"
+            android:label="@string/title_activity_restaurants"
+            >
+    </activity>
        <activity
                android:name="com.pathofthefood.flyingburger.Address.AddressDetails"
                android:label="@string/title_activity_address_details">

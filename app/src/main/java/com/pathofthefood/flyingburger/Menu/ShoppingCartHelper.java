@@ -51,11 +51,11 @@ public class ShoppingCartHelper {
 
     public static void removeCart(){
 
-        ArrayList<Products> cartList = new ArrayList<Products>(cartMap.keySet().size());
-        ShoppingCartEntry curEntry = cartMap.get(cartList);
-        for (Products p : cartMap.keySet()) {
-            removeProduct(p);
-        }
+          /* / for (Products p : cartMap.keySet()) {
+                cartList.add(p);
+                setQuantity(p,0,p.getId());
+            }*/
+            cartMap = new HashMap<Products, ShoppingCartEntry>();
     }
 
     public static ArrayList<Products> getCartList() {

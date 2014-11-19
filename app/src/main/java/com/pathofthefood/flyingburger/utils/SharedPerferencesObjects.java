@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

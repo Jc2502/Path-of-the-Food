@@ -1,4 +1,4 @@
-package com.pathofthefood.flyingburger;
+package com.pathofthefood.flyingburger.utils;
 
 /**
  * Created by co_mmsalinas on 13/11/2014.
