@@ -154,13 +154,36 @@
                 android:hint="Nombre"
                 android:id="@+id/editTextFN"
                 />
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_button"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Genero"
+                    android:padding="10dp"
+                    android:textOn="M"
+                    android:textOff="F"
+                    android:thumb="@drawable/switch_thumb"
+                    android:id="@+id/switchGenero"/>
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_button"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:textColorHint="@color/login_button"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:padding="10dp"
+                    android:hint="Fecha de Nacimiento  199X-00-00"
+                    android:id="@+id/editDate"/>
 
 
-            </LinearLayout>
-
-
-
-
+        </LinearLayout>
         </ScrollView>
     <Button
         android:layout_width="match_parent"

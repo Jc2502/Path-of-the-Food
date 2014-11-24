@@ -23,13 +23,17 @@
         <item>@drawable/ic_action_account_circle</item>
         <item>@drawable/ic_action_room</item>
         <item>@drawable/ic_action_schedule</item>
+        <item>@drawable/ic_action_thumb_up</item>
         <item>@drawable/ic_action_settings</item>
     </array>
+
     <array name="drawer_text">
         <item>"Perfil"</item>
         <item>"Pedidos"</item>
         <item>"Historial"</item>
+        <item>"Recomendacion"</item>
         <item>"Ajustes"</item>
+
     </array>
 
     <string-array name="spinners">

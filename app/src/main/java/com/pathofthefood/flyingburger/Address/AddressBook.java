@@ -20,20 +20,25 @@ import com.pathofthefood.flyingburger.*;
 import com.pathofthefood.flyingburger.Pedidos.OrdersBook;
 import com.pathofthefood.flyingburger.ldrawer_library.ActionBarDrawerToggle;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
+import com.pathofthefood.flyingburger.utils.GPSTracker;
 import com.pathofthefood.flyingburger.utils.HttpClientHelp;
 import com.pathofthefood.flyingburger.utils.NotAuthException;
 import com.pathofthefood.flyingburger.utils.SessionManager;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddressBook extends Activity implements AdapterView.OnItemClickListener {
 
     FloatingActionButton address_add;
     View v1;
     TextView tvu, tvm;
+    GPSTracker gps;
     private ListView AddressList;
     private ArrayList<Address> addressess;
+    private ArrayList<Recomend> recomends;
     private AddressAdapter adapter;
     private SessionManager session;
     private DrawerAdapter navigationDrawerAdapter;
@@ -58,6 +63,7 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         menu_drawer.add(new DrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0,0)));
         menu_drawer.add(new DrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1,0)));
         menu_drawer.add(new DrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,0)));
+        menu_drawer.add(new DrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,0)));
         session = new SessionManager(getApplicationContext());
         init();
         initDrawer();
@@ -81,16 +87,17 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         leftDrawerList = (ListView) findViewById(R.id.list_view_drawer);
         Resources res = getResources();
         int[] images = res.getIntArray(R.array.drawer_items);
-        navigationDrawerAdapter = new DrawerAdapter(AddressBook.this,menu_drawer);
-        leftDrawerList.setAdapter(navigationDrawerAdapter);
-        leftDrawerList.setOnItemClickListener(this);
         v1 = getLayoutInflater().inflate(R.layout.header, null);
         tvu = (TextView) v1.findViewById(R.id.headeruser);
-
         tvm = (TextView) v1.findViewById(R.id.headermail);
+
         tvu.setText(session.getUserDetails().getFullname());
         tvm.setText(session.getUserDetails().getEmail());
         leftDrawerList.addHeaderView(v1);
+        navigationDrawerAdapter = new DrawerAdapter(AddressBook.this,menu_drawer);
+        leftDrawerList.setAdapter(navigationDrawerAdapter);
+        leftDrawerList.setOnItemClickListener(this);
+
 
 
     }
@@ -105,12 +112,18 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                     startActivity(new Intent(getApplicationContext(),Information.class));
                     break;
                 case 2:
-                    Toast.makeText(AddressBook.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),OrdersBook.class).putExtra("history",0));
                     break;
                 case 3:
                     Toast.makeText(AddressBook.this, "Coming Soon", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(getApplicationContext(), OrdersBook.class).putExtra("history", 1));
+                    break;
+                case 4:
+                    Toast.makeText(AddressBook.this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                    gps = new GPSTracker(AddressBook.this);
+                    String lat = String.valueOf(gps.getLatitude());
+                    String lon = String.valueOf(gps.getLongitude());
+                    new RecomendTask(getApplicationContext(),recomends,session.getUserDetails().getApi_token(),lat,lon).execute();
                     break;
             }
 
@@ -170,6 +183,8 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
         super.onRestart();
         this.onCreate(null);
     }
+
+
     class AddressTask extends AsyncTask<String, Void, Integer> {
 
         private Context context;
@@ -227,6 +242,104 @@ public class AddressBook extends Activity implements AdapterView.OnItemClickList
                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddressBook.this);
                     alertDialog.setTitle("Alertas");
                     alertDialog.setMessage("No Direcciones registradas");
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                    break;
+                default:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    break;
+            }
+
+
+        }
+    }
+
+    class RecomendTask extends AsyncTask<String, Void, Integer> {
+
+        private Context context;
+        private ArrayList<Recomend> recomend;
+        private String api,lat,lon;
+        JSONArray jsonArray;
+
+        public RecomendTask(Context context, ArrayList<Recomend> recomend, String api,String lat, String lon) {
+            this.context = context;
+            this.recomend = recomend;
+            this.api = api;
+            this.lat = lat;
+            this.lon = lon;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+                if (session.isLoggedIn() && CONFIG.isOnline(this.context)) {
+                    HttpClientHelp clienteHttp = new HttpClientHelp();
+
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR);
+                    String time = "0";
+                    if(hour > 18){
+                        time = "2";
+                    }
+                    else if(hour >12)
+                    {
+                        time = "1";
+                    }
+
+                    jsonArray= clienteHttp.show_recomendation(CONFIG.SERVER_URL, api,lat,lon,time);
+                    if (jsonArray == null || jsonArray.length() == 0) {
+                        return CONFIG.ERROR_NULL;
+                    }
+                    return CONFIG.DONE;
+                } else if (session.isLoggedIn() && !CONFIG.isOnline(this.context)) {
+                    return CONFIG.DONE;
+                }
+                return CONFIG.ERROR_NOT_AUTH;
+            } catch (JSONException e) {
+                return CONFIG.ERROR_JSON;
+            } catch (Exception ex) {
+                return CONFIG.ERROR_JSON;
+
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+            switch (result) {
+                case CONFIG.DONE:
+                    Log.d("AddressTask", "Entro onPostExecute");
+                    String mensaje = "";
+                    try {
+                         mensaje = "Restaurant: "+jsonArray.getJSONObject(0).getJSONObject("restaurant").getString("name");
+                         mensaje = mensaje+ "\t\n Producto: "+jsonArray.getJSONObject(0).getJSONObject("menu_item").getString("product");
+                         mensaje = mensaje+"\t\n Distancia: "+jsonArray.getJSONObject(0).getString("distance")+" m";
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(AddressBook.this);
+                    alert.setTitle("Recomendacion");
+                    alert.setMessage(mensaje);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+
+                    break;
+                case CONFIG.ERROR_NOT_AUTH:
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    break;
+                case CONFIG.ERROR_NULL:
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddressBook.this);
+                    alertDialog.setTitle("Recomendacion");
+                    alertDialog.setMessage("No Existen Recomendaciones Por el Momento");
                     alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

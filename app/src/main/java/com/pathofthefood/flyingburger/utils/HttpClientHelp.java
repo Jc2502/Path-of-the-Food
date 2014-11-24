@@ -4,6 +4,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pathofthefood.flyingburger.Address.Address;
+import com.pathofthefood.flyingburger.Address.Recomend;
 import com.pathofthefood.flyingburger.CONFIG;
 import com.pathofthefood.flyingburger.Menu.Products;
 import com.pathofthefood.flyingburger.Pedidos.Orders;
@@ -90,7 +91,7 @@ public class HttpClientHelp {
     }
 
     //Registro de Usuario
-    public static JSONObject register(String URL, String user, String pass, String email, String phone, String fullname) throws JSONException {
+    public static JSONObject register(String URL, String user, String pass, String email, String phone, String fullname,String gender,String birthday) throws JSONException {
         BufferedReader bufferedReader = null;
         JSONObject jsonObject;
         DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -102,6 +103,8 @@ public class HttpClientHelp {
         postParameters.add(new BasicNameValuePair(CONFIG.EMAIL, email));
         postParameters.add(new BasicNameValuePair(CONFIG.PHONE, phone));
         postParameters.add(new BasicNameValuePair(CONFIG.FN, fullname));
+        postParameters.add(new BasicNameValuePair(CONFIG.GENDER, gender));
+        postParameters.add(new BasicNameValuePair(CONFIG.BDAY,birthday));
 
         try {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
@@ -859,6 +862,64 @@ public class HttpClientHelp {
 
         } catch (IOException e) {
             e.printStackTrace();
+
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public static JSONArray show_recomendation(String URL, String api, String latitude, String longitude,String time) throws JSONException {
+        BufferedReader bufferedReader = null;
+        JSONObject jsonObject;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        Log.e("ERROR", "request");
+        HttpPost request = new HttpPost(URL + CONFIG.PRED);
+        request.setHeader(CONFIG.API_HEADER, api);
+        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+        postParameters.add(new BasicNameValuePair(CONFIG.LAT, latitude));
+        postParameters.add(new BasicNameValuePair(CONFIG.LON, longitude));
+        postParameters.add(new BasicNameValuePair(CONFIG.FH, time));
+
+        try {
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(
+                    postParameters);
+            request.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(request);
+
+            bufferedReader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            jsonObject = new JSONObject(stringBuffer.toString());
+
+            Log.e("Recomendations", jsonObject.toString());
+            ArrayList<Recomend> recomendations = new ArrayList<Recomend>();
+            JSONArray jsonArray = jsonObject.getJSONArray("$recomendations");
+
+            return jsonArray;
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            Log.d("ClientProtocolException", e.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Log.d("Exception", e.toString());
 
         } finally {
             if (bufferedReader != null) {

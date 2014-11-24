@@ -15,6 +15,24 @@ public class User implements Serializable {
     private String deleted_at;
     private String created_at;
     private String fullname;
+    private String gender;
+    private String birthday;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public String getId() {
         return id;

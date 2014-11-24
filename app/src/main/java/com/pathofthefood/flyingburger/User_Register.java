@@ -7,9 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 import com.pathofthefood.flyingburger.utils.HttpClientHelp;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +15,10 @@ import org.json.JSONObject;
 
 public class User_Register extends Activity {
 
-    EditText user, pass, email, phone, fullname;
+    EditText user, pass, email, phone, fullname,date;
     Button registro;
+    Switch genero;
+    String gender = "F";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,21 @@ public class User_Register extends Activity {
         email = (EditText) findViewById(R.id.editTextEA);
         phone = (EditText) findViewById(R.id.editTextPN);
         fullname = (EditText) findViewById(R.id.editTextFN);
+        date =(EditText) findViewById(R.id.editDate);
+        genero = (Switch) findViewById(R.id.switchGenero);
         registro = (Button) findViewById(R.id.buttonRegistro);
+
+        genero.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    gender = "M";
+                } else {
+                    // The toggle is disabled
+                    gender = "F";
+                }
+            }
+        });
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,14 +54,16 @@ public class User_Register extends Activity {
                 String mail = email.getText().toString();
                 String phne = phone.getText().toString();
                 String fulln = fullname.getText().toString();
+                String bday = date.getText().toString();
                 //Log.d("VALORES: ", usr + "||" + pass);
 
-                if (usr.equals("") || pwd.equals("") || mail.equals("") || phne.equals("") || fulln.equals("")) {
+
+                if (usr.equals("") || pwd.equals("") || mail.equals("") || phne.equals("") || fulln.equals("")|| bday.equals("")) {
                     Toast.makeText(getApplicationContext(), "Alguno de los campos vacios", Toast.LENGTH_SHORT).show();
 
                 } else {
                     try {
-                        register(usr, pwd, mail, phne, fulln);
+                        register(usr, pwd, mail, phne, fulln,gender,bday);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Error Inesperado", Toast.LENGTH_SHORT).show();
@@ -58,8 +74,8 @@ public class User_Register extends Activity {
 
     }
 
-    public void register(String usr, String pwd, String mail, String phne, String fulln) throws JSONException {
-        new RegisterTask(getApplicationContext(), usr, pwd, mail, phne, fulln, registro).execute();
+    public void register(String usr, String pwd, String mail, String phne, String fulln,String gro, String cumple) throws JSONException {
+        new RegisterTask(getApplicationContext(), usr, pwd, mail, phne, fulln,gro,cumple,registro).execute();
     }
 
 
@@ -73,15 +89,19 @@ public class User_Register extends Activity {
         private String phne;
         private String fulln;
         private String message;
+        private String gender;
+        private String bday;
         private Button registerButton;
 
-        public RegisterTask(Context ctx, String usr, String pwd, String mail, String phne, String fulln, Button registerButton) {
+        public RegisterTask(Context ctx, String usr, String pwd, String mail, String phne, String fulln,String gender, String bday, Button registerButton) {
             this.context = ctx;
             this.usr = usr;
             this.pwd = pwd;
             this.mail = mail;
             this.phne = phne;
             this.fulln = fulln;
+            this.gender = gender;
+            this.bday = bday;
             this.registerButton = registerButton;
             this.registerButton.setEnabled(false);
         }
@@ -93,7 +113,7 @@ public class User_Register extends Activity {
             JSONObject jsonObject;
             try {
                 Log.d("LoginTask", "Entra a doInBack..TRY");
-                jsonObject = HttpClientHelp.register(CONFIG.SERVER_URL, this.usr, this.pwd, this.mail, this.phne, this.fulln);
+                jsonObject = HttpClientHelp.register(CONFIG.SERVER_URL, this.usr, this.pwd, this.mail, this.phne, this.fulln,this.gender,this.bday);
 
                 String value = String.valueOf(jsonObject);
                 Log.e("JSON  ", value);

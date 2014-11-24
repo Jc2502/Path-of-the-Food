@@ -15,6 +15,9 @@ public class SessionManager {
     public static final String KEY_NAME = "fullname";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_API = "api_token";
+    public static final String KEY_PHONE = "phone";
+    public static final String KEY_GENDER = "gender";
+    public static final String KEY_BDAY = "birthday";
     public static final String IS_LOGIN = "IsLoggedIn";
     public static final String PREF_NAME = "pofPref";
     public static String KEY_EMAIL = "email";
@@ -34,6 +37,9 @@ public class SessionManager {
         editor.putString(KEY_NAME, user.getFullname());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_EMAIL, user.getEmail());
+        editor.putString(KEY_PHONE, user.getPhone());
+        editor.putString(KEY_GENDER,user.getGender());
+        editor.putString(KEY_BDAY,user.getBirthday());
         editor.putString(KEY_API, user.getApi_token());
         editor.commit();
     }
@@ -43,6 +49,9 @@ public class SessionManager {
         user.setFullname(pref.getString(KEY_NAME, null));
         user.setApi_token(pref.getString(KEY_API, null));
         user.setEmail(pref.getString(KEY_EMAIL, null));
+        user.setBirthday(pref.getString(KEY_BDAY,null));
+        user.setPhone(pref.getString(KEY_PHONE,null));
+        user.setGender(pref.getString(KEY_GENDER,null));
         user.setUsername(pref.getString(KEY_USERNAME, null));
         return user;
     }
