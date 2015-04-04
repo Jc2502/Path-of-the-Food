@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CONFIG {
-    public static final String SERVER_URL = "http://pof.marinsalinas.com/api/v1/";
+    public static final String SERVER_URL = "http://pathofthefood.me/api/v1/";
     public static final String LOGIN = "login";
     public static final String LOGOUT = "logout";
     public static final String API_HEADER = "X-Auth-Token";

@@ -33,6 +33,7 @@ public class Login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         mUserEdit = (EditText) findViewById(R.id.userText);
         mPassEdit = (EditText) findViewById(R.id.passwordText);
 
