@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.pathofthefood.flyingburger.utils.HttpClientHelp;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +18,7 @@ import org.json.JSONObject;
 public class User_Register extends Activity {
 
     EditText user, pass, email, phone, fullname,date;
-    Button registro;
+    ButtonRectangle registro;
     Switch genero;
     String gender = "F";
 
@@ -32,7 +34,7 @@ public class User_Register extends Activity {
         fullname = (EditText) findViewById(R.id.editTextFN);
         date =(EditText) findViewById(R.id.editDate);
         genero = (Switch) findViewById(R.id.switchGenero);
-        registro = (Button) findViewById(R.id.buttonRegistro);
+        registro = (ButtonRectangle) findViewById(R.id.buttonRegistro);
 
         genero.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -91,9 +93,9 @@ public class User_Register extends Activity {
         private String message;
         private String gender;
         private String bday;
-        private Button registerButton;
+        private ButtonRectangle registerButton;
 
-        public RegisterTask(Context ctx, String usr, String pwd, String mail, String phne, String fulln,String gender, String bday, Button registerButton) {
+        public RegisterTask(Context ctx, String usr, String pwd, String mail, String phne, String fulln,String gender, String bday, ButtonRectangle registerButton) {
             this.context = ctx;
             this.usr = usr;
             this.pwd = pwd;

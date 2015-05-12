@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.pathofthefood.flyingburger.User.User;
 import com.pathofthefood.flyingburger.ldrawer_library.DrawerArrowDrawable;
 import com.pathofthefood.flyingburger.utils.HttpClientHelp;
@@ -24,7 +26,7 @@ import java.util.HashMap;
 public class Information extends Activity {
     User users;
     String api, id;
-    Button edit, editpass;
+    ButtonRectangle edit, editpass;
     EditText mUserEdit, mEmailEdit, mPhoneEdit, mFullnameEdit, pass1, pass2;
     SessionManager session;
     private DrawerArrowDrawable drawerArrow;
@@ -39,8 +41,8 @@ public class Information extends Activity {
         mEmailEdit = (EditText) findViewById(R.id.editEmail);
         mPhoneEdit = (EditText) findViewById(R.id.editPhone);
         mFullnameEdit = (EditText) findViewById(R.id.editFullName);
-        edit = (Button) findViewById(R.id.buttonedit);
-        editpass = (Button) findViewById(R.id.buttoneditpass);
+        edit = (ButtonRectangle) findViewById(R.id.buttonedit);
+        editpass = (ButtonRectangle) findViewById(R.id.buttoneditpass);
         pass1 = (EditText) findViewById(R.id.editpass1);
         pass2 = (EditText) findViewById(R.id.editpass2);
         session = new SessionManager(getApplicationContext());
@@ -148,11 +150,11 @@ public class Information extends Activity {
         String value;
         private Context context;
         private String api, id, user, email, phone, fullname;
-        private Button editButton;
+        private ButtonRectangle editButton;
         private String message;
         private HashMap<String, String> errors;
 
-        public EditUserTask(Context ctx, String api, String id, String user, String email, String phone, String fullname, Button editButton) {
+        public EditUserTask(Context ctx, String api, String id, String user, String email, String phone, String fullname, ButtonRectangle editButton) {
             this.context = ctx;
             this.api = api;
             this.id = id;
@@ -254,10 +256,10 @@ public class Information extends Activity {
         String value;
         private Context context;
         private String api, id, password;
-        private Button loginButton;
+        private ButtonRectangle loginButton;
         private String message;
 
-        public EditPassTask(Context ctx, String api, String id, String password, Button loginButton) {
+        public EditPassTask(Context ctx, String api, String id, String password, ButtonRectangle loginButton) {
             this.context = ctx;
             this.api = api;
             this.id = id;

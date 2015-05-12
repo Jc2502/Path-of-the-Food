@@ -1,70 +1,101 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.pathofthefood.flyingburger.Information">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pathofthefood.flyingburger.Information">
 
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:hint="User Name"
-            android:id="@+id/editUser" android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp"/>
+        android:id="@+id/editUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:hint="User Name"
+        android:inputType="textPersonName" />
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:hint="Email"
-            android:id="@+id/editEmail"
-            android:layout_below="@+id/editUser" android:layout_centerHorizontal="true"/>
+        android:id="@+id/editEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editUser"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:hint="Phone Number"
-            android:id="@+id/editPhone" android:layout_below="@+id/editEmail" android:layout_alignLeft="@+id/editEmail"
-            android:layout_alignStart="@+id/editEmail"/>
+        android:id="@+id/editPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editEmail"
+        android:layout_alignStart="@+id/editEmail"
+        android:layout_below="@+id/editEmail"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="phone" />
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Full Name"
-            android:ems="10"
-            android:id="@+id/editFullName"
-            android:layout_below="@+id/editPhone" android:layout_alignLeft="@+id/editPhone"
-            android:layout_alignStart="@+id/editPhone"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Editar"
-            android:id="@+id/buttonedit"
-            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+        android:id="@+id/editFullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editPhone"
+        android:layout_alignStart="@+id/editPhone"
+        android:layout_below="@+id/editPhone"
+        android:ems="10"
+        android:hint="Full Name"
+        android:inputType="textPersonName" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:text="Editar"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_alignLeft="@+id/editFullName"
+        android:layout_alignRight="@id/editFullName"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="15dp"
+        android:id="@+id/buttonedit"
+        android:textColor="@color/register_background"
+        android:background="#01283C"
+        />
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:hint="Password"
-            android:id="@+id/editpass1"
-            android:layout_marginTop="43dp" android:layout_below="@+id/buttonedit"
-            android:layout_alignLeft="@+id/editFullName" android:layout_alignStart="@+id/editFullName"/>
+        android:id="@+id/editpass1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editFullName"
+        android:layout_alignStart="@+id/editFullName"
+        android:layout_below="@+id/buttonedit"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Re Type Password"
-            android:ems="10"
-            android:id="@+id/editpass2" android:layout_below="@+id/editpass1" android:layout_centerHorizontal="true"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Editar password"
-            android:id="@+id/buttoneditpass" android:layout_below="@+id/editpass2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"/>
+        android:id="@+id/editpass2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editpass1"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Re Type Password"
+        android:inputType="textPassword" />
+
+
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:text="Editar password"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_margin="15dp"
+        android:layout_alignRight="@id/editpass2"
+        android:layout_alignLeft="@id/editpass2"
+        android:layout_below="@+id/editpass2"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/buttoneditpass"
+        android:textColor="@color/register_background"
+        android:background="#01283C"
+        />
 
 </RelativeLayout>

@@ -9,6 +9,10 @@
 
     </style>
 
+    <style name="MaterialSplash" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+
+    </style>
+
     <style name="AppTheme_ActionBar" parent="android:Widget.Holo.ActionBar.Solid">
         <item name="android:background">@color/apptheme_primary</item>
         <item name="android:icon">@drawable/actionbar_icon_placeholder_compat</item>

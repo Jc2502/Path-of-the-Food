@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.google.gson.Gson;
 import com.pathofthefood.flyingburger.Address.AddressBook;
 import com.pathofthefood.flyingburger.User.User;
@@ -24,8 +26,7 @@ import org.json.JSONObject;
 public class Login extends Activity {
     String value, token, usr_id;
     EditText mUserEdit, mPassEdit;
-    Button LogInButton;
-    TextView registroTextView;
+    ButtonRectangle LogInButton,RegisterButton;
     boolean login = false;
 
     @Override
@@ -37,10 +38,10 @@ public class Login extends Activity {
         mUserEdit = (EditText) findViewById(R.id.userText);
         mPassEdit = (EditText) findViewById(R.id.passwordText);
 
-        LogInButton = (Button) findViewById(R.id.loginButton);
-        registroTextView = (TextView) findViewById(R.id.textViewRegistro);
+        LogInButton = (ButtonRectangle) findViewById(R.id.loginButton);
+        RegisterButton = (ButtonRectangle) findViewById(R.id.registerButton);
 
-        registroTextView.setOnClickListener(new View.OnClickListener() {
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), User_Register.class));
@@ -114,10 +115,10 @@ public class Login extends Activity {
         private String acUser;
         private String acPass;
         private String message;
-        private Button loginButton;
+        private ButtonRectangle loginButton;
         private SessionManager session;
 
-        public LoginTask(Context ctx, String acUser, String acPass, Button loginButton) {
+        public LoginTask(Context ctx, String acUser, String acPass, ButtonRectangle loginButton) {
             this.context = ctx;
             this.acUser = acUser;
             this.acPass = acPass;

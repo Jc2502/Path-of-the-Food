@@ -68,28 +68,31 @@
             android:orientation="horizontal"
             android:layout_margin="15dp"
             android:weightSum="1">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:text="Entrar"
                 android:textAlignment="center"
-                android:id="@+id/loginButton"
-                android:layout_margin="5dp"
-                android:layout_weight="0.5"
-                android:textColor="@color/register_background"
-                android:background="@drawable/login_button_background"
-                android:layout_centerHorizontal="true"/>
-            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:id="@+id/loginButton"
+                android:textColor="@color/register_background"
+                android:background="#01283C"
+                />
+
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:text="Registrate"
                 android:textAlignment="center"
-                android:id="@+id/textViewRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textColor="@color/register_background"
                 android:layout_weight="0.5"
-                android:background="@drawable/login_button_background"
-                android:layout_centerHorizontal="true"/>
+                android:id="@+id/registerButton"
+                android:textColor="@color/register_background"
+                android:background="#01283C"
+                android:layout_centerHorizontal="true"
+                />
             </LinearLayout>
 
 </LinearLayout>
